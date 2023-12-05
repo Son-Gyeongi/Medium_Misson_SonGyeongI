@@ -1,0 +1,14 @@
+spring:
+  output:
+    ansi:
+      enabled: always
+  datasource:
+    url: jdbc:h2:mem:medium_test;MODE=MYSQL
+  jpa:
+    hibernate:
+      ddl-auto: create
+custom:
+  # 파일 업로드 설정 dirPath에서 파일업로드하면 tempDirPath에 생긴다.
+  tempDirPath: c:/temp/medium_test/temp
+  genFile:
+    dirPath: c:/temp/medium_test

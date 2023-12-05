@@ -1,0 +1,30 @@
+server:
+  shutdown: graceful
+spring:
+  servlet:
+    multipart:
+      # 파일 업로드 용량 제한
+      max-file-size: 5MB
+      max-request-size: 5MB
+  datasource:
+    # MySQL로 할 때
+    url: jdbc:mysql://172.17.0.1:3306/medium_prod
+    username: lldjlocal
+    password: 1234
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+logging:
+  level:
+    com.ll.medium: INFO
+    org.hibernate.SQL: INFO
+    org.hibernate.orm.jdbc.bind: INFO
+    org.hibernate.orm.jdbc.extract: INFO
+    org.springframework.transaction.interceptor: INFO
+custom: # 배포할 때
+  tempDirPath: /gen/temp
+  site:
+    baseUrl: "https://www.s-code.io" # 구입한 도메인 ip를 넣는다.
+  genFile:
+    dirPath: /gen
