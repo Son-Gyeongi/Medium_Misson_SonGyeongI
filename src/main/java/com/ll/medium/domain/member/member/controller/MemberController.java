@@ -21,7 +21,7 @@ public class MemberController {
     private final MemberService memberService;
 
     // 가입 폼
-    @PreAuthorize("isAnonymous()")
+    @PreAuthorize("isAnonymous()") // 로그인 되어있지 않은 사용자 접근 가능
     @GetMapping("/join")
     String showJoin() {
         return "domain/member/member/join"; // domain/member/member/join.html
@@ -48,5 +48,12 @@ public class MemberController {
 
         // TODO 반환하는 방법 바꿔야함
         return joinRs.getMsg();
+    }
+
+    // 로그인 폼
+    @PreAuthorize("isAnonymous()")
+    @GetMapping("/login")
+    public String showLogin() {
+        return "domain/member/member/login"; // domain/member/member/login.html
     }
 }
