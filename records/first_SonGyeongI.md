@@ -6,8 +6,10 @@
 > 엔드 포인트
 
 가입
-- [ ] GET /member/join : 가입 폼
-- [ ] POST /member/join : 가입 폼 처리
+- [X] GET /member/join : 가입 폼
+- [X] POST /member/join : 가입 폼 처리
+  - [ ] TODO 확인해서 프론트엔드 코딩하기
+  - [ ] 반환하는 타입 바꾸기(보고서 처럼 내릴 수 있게)
 
 로그인
 - [ ] GET /member/login : 로그인 폼
