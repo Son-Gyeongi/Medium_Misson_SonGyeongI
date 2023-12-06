@@ -19,10 +19,10 @@
 > 폼
 
 회원가입 폼
-- [ ] username, password, passwordConfirm
+- [X] username, password, passwordConfirm
 
 로그인 폼
-- [ ] username, password
+- [X] username, password (스프링 시큐리티에 로그인 맡길거라서 필요없다.)
 
 ***
 #### 필수 미션 2 : 글 CRUD
