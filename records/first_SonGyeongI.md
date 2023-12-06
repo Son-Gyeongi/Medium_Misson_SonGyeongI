@@ -10,10 +10,12 @@
 - [X] POST /member/join : 가입 폼 처리
   - [ ] TODO 확인해서 프론트엔드 코딩하기
   - [ ] 반환하는 타입 바꾸기(보고서 처럼 내릴 수 있게)
+- [ ] join.html 만들기
 
 로그인
-- [ ] GET /member/login : 로그인 폼
+- [X] GET /member/login : 로그인 폼
 - [X] POST /member/login : 로그인 폼 처리
+- [ ] login.html 만들기
 
 로그아웃
 - [X] POST /member/logout : 로그아웃

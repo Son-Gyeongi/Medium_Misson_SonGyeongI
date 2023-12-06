@@ -35,6 +35,8 @@ class MemberControllerTest {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+    // TODO 프론트엔드 코딩하고 andExpect() 더 추가하기
+
     // GET /member/join
     @DisplayName("회원가입 페이지를 보여준다.")
     @Test
@@ -80,10 +82,25 @@ class MemberControllerTest {
         assertThat(passwordEncoder.matches("1234", member.getPassword())).isTrue();
     }
 
+    // GET /member/login
+    @DisplayName("로그인 페이지를 보여준다.")
+    @Test
+    void t3() throws Exception {
+        // WHEN
+        ResultActions resultActions = mvc
+                .perform(get("/member/login"))
+                .andDo(print());
+
+        // THEN
+        resultActions.andExpect(status().isOk())
+                .andExpect(view().name("domain/member/member/login"))
+                .andExpect(handler().methodName("showLogin"));
+    }
+
     // POST /member/login
     @DisplayName("잘못된 로그인 정보")
     @Test
-    void t3() throws Exception {
+    void t4() throws Exception {
         mvc.perform(
                         formLogin("/member/login")
                                 .user("username", "user1")
@@ -96,7 +113,7 @@ class MemberControllerTest {
     // POST /member/login
     @DisplayName("로그인 처리")
     @Test
-    void t4() throws Exception {
+    void t5() throws Exception {
         mvc.perform(
                         formLogin("/member/login")
                                 .user("username", "user1")
