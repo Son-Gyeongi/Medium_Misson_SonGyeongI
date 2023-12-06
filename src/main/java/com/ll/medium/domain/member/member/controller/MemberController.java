@@ -31,7 +31,7 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     @ResponseBody
-    String join(@Valid JoinDto joinDto, BindingResult bindingResult) {
+    public String join(@Valid JoinDto joinDto, BindingResult bindingResult) {
         // TODO 프론트에서 막아주는 걸로 변경하기
         if (bindingResult.hasErrors()) {
             return "domain/member/member/join"; // domain/member/member/join.html

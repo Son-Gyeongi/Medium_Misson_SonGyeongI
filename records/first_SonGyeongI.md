@@ -13,10 +13,10 @@
 
 로그인
 - [ ] GET /member/login : 로그인 폼
-- [ ] POST /member/login : 로그인 폼 처리
+- [X] POST /member/login : 로그인 폼 처리
 
 로그아웃
-- [ ] POST /member/logout : 로그아웃
+- [X] POST /member/logout : 로그아웃
 
 > 폼
 
