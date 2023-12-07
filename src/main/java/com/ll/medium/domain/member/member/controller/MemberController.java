@@ -1,14 +1,13 @@
 package com.ll.medium.domain.member.member.controller;
 
-import com.ll.medium.domain.member.member.dto.JoinDto;
 import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.member.member.form.JoinForm;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -31,20 +30,8 @@ public class MemberController {
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
     @ResponseBody
-    public String join(@Valid JoinDto joinDto, BindingResult bindingResult) {
-        // TODO 프론트에서 막아주는 걸로 변경하기
-        if (bindingResult.hasErrors()) {
-            return "domain/member/member/join"; // domain/member/member/join.html
-        }
-
-        // 비밀번호 일치 검사 TODO 프론트에서 막아주는 걸로 변경하기
-        if (!joinDto.getPassword().equals(joinDto.getPasswordConfirm())) {
-            bindingResult.rejectValue("passwordConfirm", "passwordInCorrect",
-                    "패스워드가 일치하지 않습니다.");
-            return "domain/member/member/join"; // domain/member/member/join.html
-        }
-
-        RsData<Member> joinRs = memberService.join(joinDto.getUsername(), joinDto.getPassword());
+    public String join(@Valid JoinForm joinForm) {
+        RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword());
 
         // TODO 반환하는 방법 바꿔야함
         return joinRs.getMsg();
