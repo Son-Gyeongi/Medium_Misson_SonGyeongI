@@ -20,7 +20,7 @@
     <link rel="stylesheet" href="/resource/global.css">
     <script src="/resource/global.js"></script>
 
-    <!--    로그아웃 할 때 csrf 토큰이 자동으로 안 붙여줘서 csrf를 만들어서 서버로 보낸다.-->
+    <!--    로그아웃 할 때 csrf 토큰이 자동으로 안 붙여져서 csrf를 만들어서 서버로 보낸다.-->
     <meta name="_csrf" th:content="${_csrf.token}"/>
     <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
 </head>
