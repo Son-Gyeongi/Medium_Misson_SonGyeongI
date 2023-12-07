@@ -16,7 +16,6 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     public RsData<Member> join(String username, String password) {
-        System.out.println("nullgpgp");
         if (findByUsername(username).isPresent()) { // null 검사
             return new RsData<>("F-1", "이미 사용중인 아이디입니다.");
         }
