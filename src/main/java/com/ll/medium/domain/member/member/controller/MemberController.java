@@ -31,6 +31,7 @@ public class MemberController {
     public String join(@Valid JoinForm joinForm) {
         RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword());
 
+        // TODO 반환하는 방법 바꿔야함
         return "redirect:/member/login";
     }
 
