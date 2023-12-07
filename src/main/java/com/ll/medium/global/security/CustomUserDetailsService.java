@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 public class CustomUserDetailsService implements UserDetailsService {
     private final MemberService memberService;
 
+    // 인증에 필요한 사용자 정보를 스프링 시큐리티에 제공하고 있어서 로그인 에러가 해결
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         Member member = memberService.findByUsername(username).get();
