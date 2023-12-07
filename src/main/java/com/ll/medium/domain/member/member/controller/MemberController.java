@@ -3,6 +3,7 @@ package com.ll.medium.domain.member.member.controller;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.form.JoinForm;
 import com.ll.medium.domain.member.member.service.MemberService;
+import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 @RequestMapping("/member")
 public class MemberController {
     private final MemberService memberService;
+    private final Rq rq;
 
     // 가입 폼
     @PreAuthorize("isAnonymous()") // 로그인 되어있지 않은 사용자 접근 가능
@@ -31,8 +33,7 @@ public class MemberController {
     public String join(@Valid JoinForm joinForm) {
         RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword());
 
-        // TODO 반환하는 방법 바꿔야함
-        return "redirect:/member/login";
+        return rq.redirectOrBack("/member/login", joinRs);
     }
 
     // 로그인 폼

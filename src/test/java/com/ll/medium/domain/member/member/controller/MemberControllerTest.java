@@ -72,8 +72,8 @@ class MemberControllerTest {
         resultActions.andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(MemberController.class))
                 .andExpect(handler().methodName("join"))
-                .andExpect(redirectedUrl("/member/login"));
-//                .andExpect(redirectedUrlPattern("/member/login?msg=**"));
+//                .andExpect(redirectedUrl("/member/login")); // /member/login
+                .andExpect(redirectedUrlPattern("/member/login?msg=**")); // /member/login?msg=user1님 환영합니다
 
         // 검증
         // 제일 마지막에 등록한 회원
