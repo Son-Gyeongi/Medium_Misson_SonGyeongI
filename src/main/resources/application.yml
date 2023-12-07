@@ -30,6 +30,7 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
+#    org.springframework.security: DEBUG #스프링 시큐리티 로그 확인
 custom:
   site:
     name: medium

@@ -35,6 +35,7 @@ public class SecurityConfig {
                         formLogin -> formLogin
                                 .loginPage("/member/login") // 로그인 설정을 담당하는 부분으로 로그인 페이지의 URL
                                 .defaultSuccessUrl("/") // 로그인 성공시에 이동하는 디폴트 페이지는 루트 URL
+                                .failureHandler(new CustomAuthenticationFailureHandler()) // 실패 시 DEBUG모드로 로그 확인
                 )
                 .logout( // 스프링 시큐리티에서 구현한 로그아웃
                         logout -> logout
