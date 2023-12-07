@@ -11,7 +11,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
 @RequiredArgsConstructor
@@ -29,12 +28,10 @@ public class MemberController {
     // 가입 폼 처리
     @PreAuthorize("isAnonymous()")
     @PostMapping("/join")
-    @ResponseBody
     public String join(@Valid JoinForm joinForm) {
         RsData<Member> joinRs = memberService.join(joinForm.getUsername(), joinForm.getPassword());
 
-        // TODO 반환하는 방법 바꿔야함
-        return joinRs.getMsg();
+        return "redirect:/member/login";
     }
 
     // 로그인 폼

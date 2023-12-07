@@ -69,9 +69,11 @@ class MemberControllerTest {
                 .andDo(print());
 
         // THEN
-        resultActions.andExpect(status().isOk())
+        resultActions.andExpect(status().is3xxRedirection())
                 .andExpect(handler().handlerType(MemberController.class))
-                .andExpect(handler().methodName("join"));
+                .andExpect(handler().methodName("join"))
+                .andExpect(redirectedUrl("/member/login"));
+//                .andExpect(redirectedUrlPattern("/member/login?msg=**"));
 
         // 검증
         // 제일 마지막에 등록한 회원
