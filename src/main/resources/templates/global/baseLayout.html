@@ -36,8 +36,12 @@
 <script>
     const queryParams = getQueryParams();
 
-    if (queryParams.msg) {
+    if (queryParams.msg) { // url에 msg가 있으면 성공창이 뜬다. (초록색)
         toastNotice(queryParams.msg);
+    }
+
+    if (queryParams.failMsg) { // url에 failMsg가 있으면 경고창이 뜬다. (주황색)
+        toastWarning(queryParams.failMsg)
     }
 
     // 일부 브라우저는 history.back(); 을 통해서 보여지는 페이지 에서는

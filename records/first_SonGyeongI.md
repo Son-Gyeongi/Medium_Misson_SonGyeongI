@@ -21,7 +21,7 @@
 - [X] GET /member/login : 로그인 폼
 - [X] POST /member/login : 로그인 폼 처리
   - [X] 로그인 할 때 회원가입하지 않은 사용자의 경우 에러 메시지 띄워주기
-  - [ ] 로그인 할 때 username, password 틀릴 경우
+  - [ ] 로그인 할 때 username, password 틀릴 경우 팝업 창 띄워주기
 - [X] login.html 만들기
 
 로그아웃

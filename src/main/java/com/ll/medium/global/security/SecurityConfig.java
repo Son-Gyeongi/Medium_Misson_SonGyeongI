@@ -8,6 +8,9 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @Configuration
 @EnableMethodSecurity(prePostEnabled = true) // 로그인 여부를 판별하기 위해 사용했던 @PreAuthorize 애너테이션을 사용하기 위해 반드시 필요하다.
 public class SecurityConfig {
@@ -35,7 +38,7 @@ public class SecurityConfig {
                         formLogin -> formLogin
                                 .loginPage("/member/login") // 로그인 설정을 담당하는 부분으로 로그인 페이지의 URL
                                 .defaultSuccessUrl("/") // 로그인 성공시에 이동하는 디폴트 페이지는 루트 URL
-                                .failureHandler(new CustomAuthenticationFailureHandler()) // 실패 시 DEBUG모드로 로그 확인
+                                .failureUrl("/member/login?failMsg=" + URLEncoder.encode("아이디 또는 비밀번호가 틀렸습니다.", StandardCharsets.UTF_8))
                 )
                 .logout( // 스프링 시큐리티에서 구현한 로그아웃
                         logout -> logout
