@@ -9,6 +9,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Configuration
 public class CustomWebMvcConfig implements WebMvcConfigurer {
 
+    // 프론트 따로 할 시에 필요
     @Override
     public void addCorsMappings(CorsRegistry registry) {
         // cors 작업
@@ -20,6 +21,7 @@ public class CustomWebMvcConfig implements WebMvcConfigurer {
                 .allowCredentials(true);
     }
 
+    // 파일 업로드
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/gen/**")

@@ -38,6 +38,24 @@ public class Rq { // 회원과 관련된 로직
         }
     }
 
+    public boolean isLogined() {
+        return user != null; // 로그인된 사용자가 없다면 null
+    }
+
+    // 로그인 된 사용자 username 가져오기
+    public String getMemberUsername() {
+        return user.getUsername();
+    }
+
+    // 로그인한 사용자 찾기
+    public Member getMember() {
+        if (isLogined()) return null;
+
+        if (member == null) member = memberService.findByUsername(getMemberUsername()).get();
+
+        return member;
+    }
+
     public String redirect(String path, String msg) {
         if (msg == null) return "redirect:" + path;
 
