@@ -20,8 +20,8 @@
 
 - [X] GET /member/login : 로그인 폼
 - [X] POST /member/login : 로그인 폼 처리
-  - [X] 로그인 할 때 회원가입하지 않은 사용자의 경우 에러 메시지 띄워주기
-  - [X] 로그인 할 때 username, password 틀릴 경우 팝업 창 띄워주기
+    - [X] 로그인 할 때 회원가입하지 않은 사용자의 경우 에러 메시지 띄워주기
+    - [X] 로그인 할 때 username, password 틀릴 경우 팝업 창 띄워주기
 - [X] login.html 만들기
 
 로그아웃
@@ -51,7 +51,7 @@
 
 글 목록 조회
 
-- [ ] GET /post/list : 전체 글 리스트
+- [X] GET /post/list : 전체 글 리스트
 - [ ] 공개된 글만 노출
 
 내 글 목록 조회
@@ -64,8 +64,9 @@
 
 글 작성
 
-- [ ] GET /post/write : 글 작성 폼
-- [ ] POST /post/write : 글 작성 처리
+- [X] GET /post/write : 글 작성 폼
+- [X] POST /post/write : 글 작성 처리
+    - [X] 작성자 save 안되는 현상
 
 글 수정
 
@@ -98,7 +99,6 @@
 <hr>
 
 ### first 미션 요약
-
 
 [접근 방법]
 

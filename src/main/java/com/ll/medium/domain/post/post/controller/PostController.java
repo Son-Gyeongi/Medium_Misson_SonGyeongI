@@ -41,8 +41,6 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String writePost(@Valid WriteForm writeForm) {
-        System.out.println("WriteForm : " + writeForm.toString());
-
         RsData<Post> post = postService.write(writeForm, rq.getMember());
 
         // TODO 리다이렉트 상세.html로 바꾸기
