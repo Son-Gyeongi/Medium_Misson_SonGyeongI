@@ -15,6 +15,9 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Component;
 import org.springframework.web.context.annotation.RequestScope;
 
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
+
 @RequestScope
 @Component
 @Getter
@@ -58,6 +61,8 @@ public class Rq { // 회원과 관련된 로직
 
     public String redirect(String path, String msg) {
         if (msg == null) return "redirect:" + path;
+
+        msg = URLEncoder.encode(msg, StandardCharsets.UTF_8);
 
         return "redirect:" + path + "?msg=" + msg;
     }

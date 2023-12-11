@@ -1,6 +1,7 @@
 package com.ll.medium.domain.post.post.entity;
 
 import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.post.post.form.WriteForm;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -19,5 +20,12 @@ public class Post {
     private Member author;
 
     // TODO 메서드로 빠지는 걸까?
-    private boolean isPublished; // 체크 박스
+    private Boolean isPublished; // 체크 박스
+
+    public Post(WriteForm writeForm, Member author) {
+        this.title = writeForm.getTitle();
+        this.body = writeForm.getBody();
+        this.author = author;
+        this.isPublished = writeForm.getIsPublished();
+    }
 }
