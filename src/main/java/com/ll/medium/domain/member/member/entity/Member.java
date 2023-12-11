@@ -1,25 +1,21 @@
 package com.ll.medium.domain.member.member.entity;
 
+import com.ll.medium.global.jpa.baseEntity.BaseEntity;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import lombok.*;
+import lombok.experimental.SuperBuilder;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.List;
 
 @Entity
-@Getter
-@Builder
+@SuperBuilder
 @AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class Member {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @EqualsAndHashCode.Include // 값 비교시 id만 비교
-    private Long id;
+@Getter
+@Setter
+@ToString(callSuper = true)
+public class Member extends BaseEntity {
     private String username;
     private String password;
 
@@ -28,6 +24,7 @@ public class Member {
     }
 
     // 권한 부여
+    @SuppressWarnings("JpaAttributeTypeInspection") // 무시해도 되는 오류를 끌 수 있다.
     public List<SimpleGrantedAuthority> getAuthorities() {
         if (isAdmin()) {
             return List.of(new SimpleGrantedAuthority(Role.ADMIN.value()),
