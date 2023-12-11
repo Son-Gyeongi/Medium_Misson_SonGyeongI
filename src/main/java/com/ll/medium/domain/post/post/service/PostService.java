@@ -6,6 +6,8 @@ import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -32,5 +34,11 @@ public class PostService {
                 "작성이 완료되었습니다.",
                 post
         );
+    }
+
+    // 최신글 30개 가져오기
+    public List<Post> getLatest30Posts() {
+        Pageable pageable = PageRequest.of(0, 30); // 0은 페이지 번호, 30은 페이지 크기
+        return postRepository.findTop30ByOrderByCreatedDateDesc(pageable);
     }
 }
