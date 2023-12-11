@@ -3,7 +3,6 @@ package com.ll.medium.domain.post.post.service;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.domain.post.post.entity.Post;
-import com.ll.medium.domain.post.post.form.WriteForm;
 import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
@@ -23,8 +22,8 @@ public class PostService {
         return posts;
     }
 
-    public RsData<Post> write(WriteForm writeForm, Member author) {
-        Post post = new Post(writeForm, author);
+    public RsData<Post> write(String title, String body, Boolean isPublished, Member author) {
+        Post post = new Post(title, body, isPublished, author);
 
         postRepository.save(post);
 
