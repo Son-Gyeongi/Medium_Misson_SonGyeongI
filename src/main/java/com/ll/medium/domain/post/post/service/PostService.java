@@ -3,14 +3,16 @@ package com.ll.medium.domain.post.post.service;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
-import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -18,13 +20,14 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
-    private final Rq rq;
 
     // 공개된 글만 노출
-    public List<Post> findAll() {
-        List<Post> posts = postRepository.findAllByIsPublishedTrue();
-
-        return posts;
+    public Page<Post> findAll(int page) {
+        // 페이징 조건
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createdDate"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts)); // 조회할 page, 한 페이지에 보여줄 게시물 갯수
+        return postRepository.findAllByIsPublishedTrue(pageable);
     }
 
     @Transactional

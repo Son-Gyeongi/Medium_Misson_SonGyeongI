@@ -1,6 +1,7 @@
 package com.ll.medium.domain.post.post.repository;
 
 import com.ll.medium.domain.post.post.entity.Post;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
@@ -11,8 +12,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // isPublished가 TRUE이고, 주어진 id에 적합한 글 가져오기
     Optional<Post> findByIsPublishedTrueAndId(Long id);
 
-    // isPublished가 TRUE인 공개된 글만 가져오기
+    // 게시글 목록, isPublished가 TRUE인 공개된 글만 가져오기
     List<Post> findAllByIsPublishedTrue();
+
+    // 게시글 목록(페이징), isPublished가 TRUE인 공개된 글만 가져오기
+    Page<Post> findAllByIsPublishedTrue(Pageable pageable);
 
     // 최신글 30개 가져오기
     List<Post> findTop30ByOrderByCreatedDateDesc(Pageable pageable);

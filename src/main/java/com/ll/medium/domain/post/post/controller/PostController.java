@@ -8,12 +8,11 @@ import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @Controller
 @RequestMapping("/post")
@@ -24,10 +23,10 @@ public class PostController {
 
     // 공개된 글만 노출
     @GetMapping("/list")
-    public String getPosts(Model model) {
-        List<Post> posts = postService.findAll();
+    public String getPosts(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        Page<Post> paging = postService.findAll(page);
 
-        model.addAttribute("posts", posts);
+        model.addAttribute("paging", paging);
 
         return "domain/post/post/list";
     }
