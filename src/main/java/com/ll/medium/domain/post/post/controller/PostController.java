@@ -56,6 +56,17 @@ public class PostController {
         return "domain/post/post/detail";
     }
 
+    // 게시글 수정
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/{id}/modify")
+    public String showModify(@PathVariable Long id, Model model) {
+        Post post = postService.getPost(id);
+
+        model.addAttribute("post", post);
+
+        return "domain/post/post/modify";
+    }
+
     // 게시글 삭제
     @PreAuthorize("isAuthenticated()")
     @DeleteMapping("/{id}/delete")

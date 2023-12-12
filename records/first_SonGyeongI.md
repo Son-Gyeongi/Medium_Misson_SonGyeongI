@@ -74,7 +74,7 @@
 
 글 수정
 
-- [ ] GET /post/1/modify : 1번 글 수정 폼
+- [X] GET /post/1/modify : 1번 글 수정 폼
 - [ ] PUT /post/1/modify : 1번 글 수정 폼 처리
 
 글 삭제
@@ -94,7 +94,7 @@
 
 글 수정 폼
 
-- [ ] title, body, isPublished(체크박스, value="true")
+- [X] title, body, isPublished(체크박스, value="true")
 
 <hr>
 
