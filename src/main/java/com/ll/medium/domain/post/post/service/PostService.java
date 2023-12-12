@@ -35,10 +35,15 @@ public class PostService {
         );
     }
 
-    // TODO 공개된 글만 노출
+    // 공개된 글만 노출
     // 최신글 30개 가져오기
     public List<Post> getLatest30Posts() {
         Pageable pageable = PageRequest.of(0, 30); // 0은 페이지 번호, 30은 페이지 크기
         return postRepository.findByIsPublishedTrueOrderByCreatedDateDesc(pageable);
+    }
+
+    // 상세 게시글 가져오기
+    public Post detailPost(Long id) {
+        return postRepository.findByIsPublishedTrueAndId(id).orElseThrow();
     }
 }

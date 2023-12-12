@@ -5,8 +5,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface PostRepository extends JpaRepository<Post, Long> {
+    // isPublished가 TRUE이고, 주어진 id에 적합한 글 가져오기
+    Optional<Post> findByIsPublishedTrueAndId(Long id);
+
     // isPublished가 TRUE인 공개된 글만 가져오기
     List<Post> findAllByIsPublishedTrue();
 

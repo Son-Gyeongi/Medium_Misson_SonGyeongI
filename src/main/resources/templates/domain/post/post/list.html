@@ -10,7 +10,7 @@
 
     <ul th:if="${posts.size} > 0">
         <li th:each="post : ${posts.reversed}">
-            <a class="link" th:href="|/post/detail/${post.id}|">
+            <a class="link" th:href="|/post/${post.id}|">
                 <th:block th:text="|${post.id}번 : ${post.title}|"></th:block>
                 <th:block th:text="|by ${post.author.username}|"></th:block>
             </a>

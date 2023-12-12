@@ -1,0 +1,34 @@
+<html layout:decorate="~{global/layout}">
+
+<head>
+    <title th:text="|게시글 내용 - ${post.id}. ${post.title}|"></title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h1 class="font-bold mb-2">
+        <i class="fa-regular fa-newspaper"></i> 게시글 내용</h1>
+    <hr>
+
+    <div class="mt-2">
+        <div class="badge badge-outline" th:text="${post.id}"></div>
+        <span th:text="${post.title}"></span>
+    </div>
+
+    <div class="mt-2 whitespace-pre-line" th:text="${post.body}"></div>
+
+    <hr class="mt-2">
+
+    <!--<div class="mt-2 flex gap-2 justify-center">
+        <a th:if="${@postService.canModify(@rq.member, post)}" class="btn-link"
+           th:href="|/post/modify/${post.id}|">글 수정</a>
+        &lt;!&ndash;        global.js에 동적으로 넘어가게 만들었다. 그래서 삭제 잘됨 &ndash;&gt;
+        <a method="DELETE" th:if="${@postService.canDelete(@rq.member, post)}" class="btn-link"
+           onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/post/delete/${post.id}|">
+            글 삭제
+        </a>
+    </div>-->
+</div>
+</body>
+</html>

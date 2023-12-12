@@ -11,6 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
@@ -44,7 +45,17 @@ public class PostController {
     public String writePost(@Valid WriteForm writeForm) {
         RsData<Post> post = postService.write(writeForm.getTitle(), writeForm.getBody(), writeForm.getIsPublished(), rq.getMember());
 
-        // TODO 리다이렉트 상세.html로 바꾸기
-        return rq.redirect("/", post.getMsg());
+        // 상세 페이지로 이동
+        return rq.redirect("/post/%d".formatted(post.getData().getId()), post.getMsg());
+    }
+
+    // 게시글 상세내용
+    @GetMapping("/{id}")
+    public String detailPost(@PathVariable Long id, Model model) {
+        Post post = postService.detailPost(id);
+
+        model.addAttribute("post", post);
+
+        return "domain/post/post/detail";
     }
 }
