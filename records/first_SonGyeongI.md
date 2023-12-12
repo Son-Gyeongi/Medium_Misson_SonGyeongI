@@ -46,14 +46,15 @@
 
 홈
 
-- [ ] GET / : 홈
-- [ ] 최신글 30개 노출
+- [X] GET / : 홈
+- [X] 최신글 30개 노출
   - [X] 테스트용 더미 데이터 추가
+  - [X] 공개된 글만 노출
 
 글 목록 조회
 
 - [X] GET /post/list : 전체 글 리스트
-- [ ] 공개된 글만 노출
+- [X] 공개된 글만 노출
 
 내 글 목록 조회
 
@@ -87,7 +88,7 @@
 
 글 쓰기 폼
 
-- [ ] title, body, isPublished(체크박스, value="true")
+- [X] title, body, isPublished(체크박스, value="true")
 
 글 수정 폼
 

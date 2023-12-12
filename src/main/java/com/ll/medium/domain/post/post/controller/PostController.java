@@ -23,6 +23,7 @@ public class PostController {
     private final PostService postService;
     private final Rq rq;
 
+    // 공개된 글만 노출
     @GetMapping("/list")
     public String getPosts(Model model) {
         List<Post> posts = postService.findAll();

@@ -18,6 +18,7 @@
             <ul tabindex="0"
                 class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
                 <!--                <li th:if="${@rq.admin}"><a href="/adm"><i class="fa-solid fa-gauge-high"></i> 관리자</a></li>-->
+                <li><a href="/"><i class="fa-solid fa-house"></i> 메인</a></li>
                 <li><a href="/post/list"><i class="fa-solid fa-list"></i> 게시물 목록</a></li>
                 <li th:if="${@rq.logined}"><a href="/post/write"><i class="fa-solid fa-pen"></i> 게시물 작성</a></li>
                 <li th:unless="${@rq.logined}"><a href="/member/login"><i class="fa-solid fa-right-to-bracket"></i>

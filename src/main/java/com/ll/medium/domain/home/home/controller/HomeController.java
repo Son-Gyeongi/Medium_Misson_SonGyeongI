@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 public class HomeController {
     private final PostService postService;
 
+    // 공개된 최신글 30개 가져오기
     @GetMapping("/")
     public String showMain(Model model) {
         List<Post> posts = postService.getLatest30Posts();

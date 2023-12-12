@@ -1,7 +1,6 @@
 package com.ll.medium.domain.post.post.service;
 
 import com.ll.medium.domain.member.member.entity.Member;
-import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.global.rsData.RsData;
@@ -16,10 +15,10 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
-    private final MemberRepository memberRepository;
 
+    // 공개된 글만 노출
     public List<Post> findAll() {
-        List<Post> posts = postRepository.findAll();
+        List<Post> posts = postRepository.findAllByIsPublishedTrue();
 
         return posts;
     }
@@ -36,9 +35,10 @@ public class PostService {
         );
     }
 
+    // TODO 공개된 글만 노출
     // 최신글 30개 가져오기
     public List<Post> getLatest30Posts() {
         Pageable pageable = PageRequest.of(0, 30); // 0은 페이지 번호, 30은 페이지 크기
-        return postRepository.findTop30ByOrderByCreatedDateDesc(pageable);
+        return postRepository.findByIsPublishedTrueOrderByCreatedDateDesc(pageable);
     }
 }
