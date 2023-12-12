@@ -23,6 +23,12 @@ spring:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
+  thymeleaf: # Thymeleaf의 템플릿 캐시가 비활성화
+    cache: false # 개발 중에 템플릿이 변경될 때마다 자동으로 적용되는 것을 도와주어 개발자가 빠르게 변경 사항을 확인할 수 있도록 합니다.
+  mvc: # Spring MVC의 Hidden Method Filter 활성화
+    hiddenmethod:
+      filter: # HTTP 메서드를 지정하는 데 사용되는 _method 파라미터를 처리하는 필터
+        enabled: true # HTML 폼에서 PUT 또는 DELETE와 같은 HTTP 메서드를 사용할 수 있게 됨
 logging:
   level:
     com.ll.medium: DEBUG

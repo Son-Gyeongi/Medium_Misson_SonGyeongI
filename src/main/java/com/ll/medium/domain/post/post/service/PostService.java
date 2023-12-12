@@ -3,6 +3,7 @@ package com.ll.medium.domain.post.post.service;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
+import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
@@ -15,6 +16,7 @@ import java.util.List;
 @RequiredArgsConstructor
 public class PostService {
     private final PostRepository postRepository;
+    private final Rq rq;
 
     // 공개된 글만 노출
     public List<Post> findAll() {
@@ -42,8 +44,22 @@ public class PostService {
         return postRepository.findByIsPublishedTrueOrderByCreatedDateDesc(pageable);
     }
 
-    // 상세 게시글 가져오기
-    public Post detailPost(Long id) {
-        return postRepository.findByIsPublishedTrueAndId(id).orElseThrow();
+    // 게시글 가져오기
+    public Post getPost(Long id) {
+        return postRepository.findByIsPublishedTrueAndId(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 하는 게시글이 없습니다.")
+        );
+    }
+
+    // 게시글 삭제
+    public void deletePost(Post post) {
+        postRepository.delete(post);
+    }
+
+    // 권한 여부 체크는 서비스에서 해야함
+    public boolean canDelete(Member author, Post post) {
+        if (author == null) return false;
+
+        return post.getAuthor().equals(author);
     }
 }

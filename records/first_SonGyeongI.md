@@ -79,7 +79,7 @@
 
 글 삭제
 
-- [ ] DELETE /post/1/delete : 1번 글 삭제
+- [X] DELETE /post/1/delete : 1번 글 삭제
 
 특정 회원의 글 모아보기
 

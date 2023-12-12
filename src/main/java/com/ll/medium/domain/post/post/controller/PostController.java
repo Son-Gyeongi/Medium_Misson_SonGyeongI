@@ -10,10 +10,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -52,10 +49,27 @@ public class PostController {
     // 게시글 상세내용
     @GetMapping("/{id}")
     public String detailPost(@PathVariable Long id, Model model) {
-        Post post = postService.detailPost(id);
+        Post post = postService.getPost(id);
 
         model.addAttribute("post", post);
 
         return "domain/post/post/detail";
+    }
+
+    // 게시글 삭제
+    @PreAuthorize("isAuthenticated()")
+    @DeleteMapping("/{id}/delete")
+    public String deletePost(@PathVariable Long id) {
+        // 게시글이 존재 여부
+        Post post = postService.getPost(id);
+
+        // 권한 여부 체크
+        if (!postService.canDelete(rq.getMember(), post))
+            throw new RuntimeException("삭제 권한이 없습니다.");
+
+        // 게시글 삭제
+        postService.deletePost(post);
+
+        return rq.redirect("/", "%d번 게시글이 삭제되었습니다.".formatted(id));
     }
 }

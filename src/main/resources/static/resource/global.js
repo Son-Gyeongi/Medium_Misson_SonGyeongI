@@ -54,6 +54,7 @@ $(function () {
         if (value) $(el).val(value);
     });
 
+    // html <a>에서 DELETE, POST, PUT로 넘어갈 수 있게 해준다.
     $('a[method="DELETE"], a[method="POST"], a[method="PUT"]').click(function (e) {
         if ($(this).attr('onclick-after')) {
             let onclickAfter = null;
