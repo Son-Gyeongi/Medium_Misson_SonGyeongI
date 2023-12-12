@@ -23,4 +23,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // isPublished가 TRUE이고, 최근 30개의 게시글을 날짜 기준으로 내림차순으로 가져오는 쿼리 메소드
     List<Post> findByIsPublishedTrueOrderByCreatedDateDesc(Pageable pageable);
+
+    // 내 글 목록 조회
+    Page<Post> findAllByAuthorIdOrderByCreatedDateDesc(Long authorId, Pageable pageable);
 }

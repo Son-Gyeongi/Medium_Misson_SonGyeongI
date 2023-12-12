@@ -14,6 +14,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+
 @Controller
 @RequestMapping("/post")
 @RequiredArgsConstructor
@@ -29,6 +31,22 @@ public class PostController {
         model.addAttribute("paging", paging);
 
         return "domain/post/post/list";
+    }
+
+    // 내 글 목록 조회
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/myList")
+    public String myList(Principal principal, Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
+        // 로그인한 회원 조회하는 회원 일치 여부
+        // TODO 어차피 로그인 한 사용자만 볼 수 있어서 필요없을지도
+        if (!rq.getMember().getUsername().equals(principal.getName()))
+            throw new RuntimeException("권한이 없는 사용자입니다.");
+
+        Page<Post> paging = postService.getMyList(rq.getMember(), page);
+
+        model.addAttribute("paging", paging);
+
+        return "domain/post/post/myPage";
     }
 
     @GetMapping("/write")

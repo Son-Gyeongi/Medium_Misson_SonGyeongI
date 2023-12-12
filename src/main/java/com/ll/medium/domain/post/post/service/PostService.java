@@ -30,6 +30,15 @@ public class PostService {
         return postRepository.findAllByIsPublishedTrue(pageable);
     }
 
+    // 내 글 목록 조회
+    public Page<Post> getMyList(Member author, int page) {
+        // 페이징 조건
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createdDate"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts)); // 조회할 page, 한 페이지에 보여줄 게시물 갯수
+        return postRepository.findAllByAuthorIdOrderByCreatedDateDesc(author.getId(), pageable);
+    }
+
     @Transactional
     public RsData<Post> write(String title, String body, Boolean isPublished, Member author) {
         Post post = new Post(title, body, isPublished, author);
