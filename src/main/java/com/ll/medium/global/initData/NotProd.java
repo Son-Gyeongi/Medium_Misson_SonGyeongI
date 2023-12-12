@@ -49,7 +49,7 @@ public class NotProd {
         postService.write("제목4", "내용4", Boolean.TRUE, member2);
         postService.write("제목5", "내용5", Boolean.FALSE, member2);
 
-        IntStream.rangeClosed(6,35).forEach(
+        IntStream.rangeClosed(6, 35).forEach(
                 i -> {
                     String title = "제목" + i;
                     String body = "내용" + i;
@@ -58,7 +58,7 @@ public class NotProd {
                 }
         );
 
-        IntStream.rangeClosed(36,40).forEach(
+        IntStream.rangeClosed(36, 40).forEach(
                 i -> {
                     String title = "제목" + i;
                     String body = "내용" + i;

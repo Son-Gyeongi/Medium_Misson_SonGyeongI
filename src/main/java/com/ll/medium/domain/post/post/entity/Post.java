@@ -2,7 +2,9 @@ package com.ll.medium.domain.post.post.entity;
 
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.global.jpa.baseEntity.BaseEntity;
-import jakarta.persistence.*;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.ManyToOne;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
 
