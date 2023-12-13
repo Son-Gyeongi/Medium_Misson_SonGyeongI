@@ -112,11 +112,7 @@ public class PostController {
         // 게시글 수정
         postService.modify(post, modifyForm.getTitle(), modifyForm.getBody(), modifyForm.getIsPublished(), rq.getMember());
 
-        if (modifyForm.getIsPublished() == Boolean.TRUE) {
-            return rq.redirect("/post/%d".formatted(id), "%d번 게시글이 수정되었습니다.".formatted(id));
-        } else {
-            return rq.redirect("/", "%d번 게시글이 수정되었습니다.".formatted(id));
-        }
+        return rq.redirect("/post/%d".formatted(id), "%d번 게시글이 수정되었습니다.".formatted(id));
     }
 
     // 게시글 삭제

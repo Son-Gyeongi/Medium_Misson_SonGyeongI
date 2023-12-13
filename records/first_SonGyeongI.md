@@ -93,6 +93,7 @@
   - url : /post/user/user1
   - userPosts.html
 - [ ] GET /b/user1/3 : 회원 user1 의 글 중에서 3번글 상세보기
+  - 글 상세보기로 들어가지는데 왜 필요한지 생각해보기
 
 > 폼
 

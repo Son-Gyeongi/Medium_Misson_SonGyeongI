@@ -4,6 +4,7 @@ import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
+import com.ll.medium.global.rq.Rq;
 import com.ll.medium.global.rsData.RsData;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -22,6 +23,7 @@ import java.util.List;
 public class PostService {
     private final PostRepository postRepository;
     private final MemberRepository memberRepository;
+    private final Rq rq;
 
     // 공개된 글만 노출
     public Page<Post> findAll(int page) {
@@ -84,6 +86,16 @@ public class PostService {
 
     // 게시글 상세 조회
     public Post getDetailPost(Long id) {
+        // 작성자와 로그인한 author가 같다면 비공개글 보여주기
+        Post post = postRepository.findById(id).orElseThrow(
+                () -> new IllegalArgumentException("해당 하는 게시글이 없습니다.")
+        );
+
+        if (rq.getMember().getUsername().equals(post.getAuthor().getUsername())) {
+            return post;
+        }
+
+        // 공개된 글 보여주기
         return postRepository.findByIsPublishedTrueAndId(id).orElseThrow(
                 () -> new IllegalArgumentException("해당 하는 게시글이 없습니다.")
         );
