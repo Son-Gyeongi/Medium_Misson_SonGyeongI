@@ -12,7 +12,6 @@
         <tr class="text-center">
             <th>번호</th>
             <th style="width:50%">제목</th>
-            <th>글쓴이</th>
             <th>공개 여부</th>
             <th>작성일시</th>
         </tr>
@@ -32,7 +31,6 @@
 &lt;!&ndash;                    #list.size(이터러블객체)는 이터러블 객체의 사이즈를 반환하는 타임리프의 유틸리티&ndash;&gt;
                 </span>-->
             </td>
-            <td><span th:if="${post.author != null}" th:text="${post.author.username}"></span></td>
             <td><span th:if="${post.author != null}" th:text="${post.isPublished}"></span></td>
             <!--            날짜를 보기 좋게 출력하기 위해 타임리프의 #temporals.format 유틸리티를 사용-->
             <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></td>

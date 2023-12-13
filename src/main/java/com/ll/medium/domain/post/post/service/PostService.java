@@ -1,6 +1,7 @@
 package com.ll.medium.domain.post.post.service;
 
 import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.member.member.repository.MemberRepository;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.repository.PostRepository;
 import com.ll.medium.global.rsData.RsData;
@@ -20,6 +21,7 @@ import java.util.List;
 @Transactional(readOnly = true)
 public class PostService {
     private final PostRepository postRepository;
+    private final MemberRepository memberRepository;
 
     // 공개된 글만 노출
     public Page<Post> findAll(int page) {
@@ -37,6 +39,20 @@ public class PostService {
         sorts.add(Sort.Order.desc("createdDate"));
         Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts)); // 조회할 page, 한 페이지에 보여줄 게시물 갯수
         return postRepository.findAllByAuthorIdOrderByCreatedDateDesc(author.getId(), pageable);
+    }
+
+    // 특정 회원(username)의 전체 글 리스트
+    public Page<Post> getUserPosts(String username, int page) {
+        // 페이징 조건
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("createdDate"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
+
+        // 유저 찾기
+        Member user = memberRepository.findByUsername(username)
+                .orElseThrow(() -> new RuntimeException("존재하지 않는 회원입니다."));
+
+        return postRepository.findByIsPublishedTrueAndAuthorId(user.getId(), pageable);
     }
 
     @Transactional

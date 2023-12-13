@@ -12,6 +12,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
     // isPublished가 TRUE이고, 주어진 id에 적합한 글 가져오기
     Optional<Post> findByIsPublishedTrueAndId(Long id);
 
+    // 특정 회원(username)의 전체 글 리스트
+    Page<Post> findByIsPublishedTrueAndAuthorId(Long authorId, Pageable pageable);
+
     // 게시글 목록, isPublished가 TRUE인 공개된 글만 가져오기
     List<Post> findAllByIsPublishedTrue();
 
