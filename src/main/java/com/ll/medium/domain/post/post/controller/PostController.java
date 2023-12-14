@@ -49,17 +49,6 @@ public class PostController {
         return "domain/post/post/myPage";
     }
 
-    // 특정 회원(username)의 전체 글 리스트
-    @GetMapping("/user/{username}")
-    public String getUserPosts(@PathVariable String username, Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
-        Page<Post> paging = postService.getUserPosts(username, page);
-
-        model.addAttribute("paging", paging);
-        model.addAttribute("username", username);
-
-        return "domain/post/post/userPosts";
-    }
-
     @GetMapping("/write")
     public String writePost() {
 

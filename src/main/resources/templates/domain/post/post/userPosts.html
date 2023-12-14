@@ -25,7 +25,7 @@
             <!--            제목을 왼쪽 정렬-->
             <td class="text-start">
                 <!--            타임리프는 문자열을 연결(concatenation)할 때 | 문자를 사용 -->
-                <a th:href="@{|/post/${post.id}|}" th:text="${post.title}"></a>
+                <a th:href="@{|/b/${post.author.username}/${post.id}|}" th:text="${post.title}"></a>
                 <!--<span class="text-danger small ms-2"
                       th:if="${#lists.size(post.answerList) > 0}"
                       th:text="${#lists.size(post.answerList)}">
