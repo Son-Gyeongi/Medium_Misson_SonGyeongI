@@ -26,7 +26,7 @@
                 </li>
                 <li th:unless="${@rq.logined}"><a href="/member/join"><i class="fa-solid fa-user-plus"></i> 회원가입</a>
                 </li>
-                <li th:if="${@rq.logined}"><a href="/member/me"><i class="fa-solid fa-user"></i> 내 정보</a></li>
+                <li th:if="${@rq.logined}"><a href="/post/myList"><i class="fa-solid fa-user"></i> 내 정보</a></li>
                 <li th:if="${@rq.logined}">
                     <a href="/member/logout" method="POST"><i class="fa-solid fa-right-from-bracket"></i> 로그아웃</a>
                 </li>
