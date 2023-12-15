@@ -49,6 +49,7 @@ public class PostController {
         return "domain/post/post/myPage";
     }
 
+    @PreAuthorize("isAuthenticated()") // 로그인한 회원만 글쓰기 접근 가능
     @GetMapping("/write")
     public String writePost() {
 
@@ -58,7 +59,6 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String writePost(@Valid WriteForm writeForm) {
-        System.out.println(writeForm.toString());
         RsData<Post> post = postService.write(writeForm.getTitle(), writeForm.getBody(), writeForm.getIsPublished(), rq.getMember());
 
         // 상세 페이지로 이동
