@@ -17,6 +17,7 @@
 
 - [X] Post 클래스에 private boolean isPaid 필드를 추가
     - 해당 필드가 true 인 글은 유료회원이 아닌사람에게는 상세보기(GET /post/1)에서 본문(content)이 나올 자리에 이 글은 유료멤버십전용 입니다. 라는 문구가 나온다.
+    - Post에서 true: 유료 게시글, false: 무료 게시글
 
 > 엔드 포인트
 
