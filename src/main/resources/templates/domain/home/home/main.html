@@ -1,1 +1,25 @@
-메인
+<html layout:decorate="~{global/layout}">
+
+<head>
+    <title>메인</title>
+</head>
+
+<body>
+<div layout:fragment="content">
+
+    <h1 class="font-bold mb-2"><i class="fa-solid fa-right-to-bracket"></i> 메인</h1>
+
+    <ul th:if="${posts.size} > 0">
+        <ul th:if="${posts.size} > 0">
+            <li th:each="post, iterStat : ${posts}">
+                <a class="link" th:href="|/post/${post.id}|">
+                    <th:block th:text="|${iterStat.index + 1}번 : ${post.title}|"></th:block>
+                    <th:block th:text="|by ${post.author.username}|"></th:block>
+                </a>
+            </li>
+        </ul>
+    </ul>
+
+</div>
+</body>
+</html>

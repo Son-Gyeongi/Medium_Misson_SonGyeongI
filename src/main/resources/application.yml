@@ -1,17 +1,16 @@
 spring:
   profiles:
     active: dev
-    include: secret # \uC124\uC815 \uBC18\uC601\uB41C\uB2E4.
+    include: secret # 해당 yml 포함
   servlet:
     multipart:
-      # \uBCF4\uD1B5\uC740 \uD14C\uC2A4\uD2B8\uD560 \uB54C \uC6A9\uB7C9\uC744 \uD0A4\uC6CC\uBCF4\uACE0 \uC6B4\uC601\uBAA8\uB4DC(prod)\uC5D0\uC11C\uB294 \uC6A9\uB7C9\uC744 \uB0AE\uCD98\uB2E4.
       max-file-size: 50MB
       max-request-size: 50MB
   threads:
     virtual:
       enabled: true
   datasource:
-    url: jdbc:h2:./medium_dev;MODE=MYSQL # DB \uC774\uB984 : medium_dev
+    url: jdbc:h2:./medium_dev;MODE=MYSQL # DB 이름 : medium_dev
     username: sa
     password:
     driver-class-name: org.h2.Driver
@@ -24,6 +23,12 @@ spring:
         format_sql: true
         highlight_sql: true
         use_sql_comments: true
+  thymeleaf: # Thymeleaf의 템플릿 캐시가 비활성화
+    cache: false # 개발 중에 템플릿이 변경될 때마다 자동으로 적용되는 것을 도와주어 개발자가 빠르게 변경 사항을 확인할 수 있도록 합니다.
+  mvc: # Spring MVC의 Hidden Method Filter 활성화
+    hiddenmethod:
+      filter: # HTTP 메서드를 지정하는 데 사용되는 _method 파라미터를 처리하는 필터
+        enabled: true # HTML 폼에서 PUT 또는 DELETE와 같은 HTTP 메서드를 사용할 수 있게 됨
 logging:
   level:
     com.ll.medium: DEBUG
@@ -31,10 +36,11 @@ logging:
     org.hibernate.orm.jdbc.bind: TRACE
     org.hibernate.orm.jdbc.extract: TRACE
     org.springframework.transaction.interceptor: TRACE
+#    org.springframework.security: DEBUG #스프링 시큐리티 로그 확인
 custom:
   site:
     name: medium
     baseUrl: "http://localhost:${server.port}"
   tempDirPath: c:/temp/medium_dev/temp
-  genFile: # \uD30C\uC77C \uC5C5\uB85C\uB4DC \uC124\uC815 dirPath\uC5D0\uC11C \uD30C\uC77C\uC5C5\uB85C\uB4DC\uD558\uBA74 tempDirPath\uC5D0 \uC0DD\uAE34\uB2E4.
+  genFile:
     dirPath: c:/temp/medium_dev

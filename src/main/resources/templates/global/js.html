@@ -1,0 +1,19 @@
+<script th:inline="javascript">
+    // 외부에서 받은 파라미터를 자바스크립트에 넣으려면 이렇게 하면 된다. msg값이 있으면 나오고 없으면 null이 나온다.
+    const msg = /*[[${msg}]]*/ null;
+    const exStr = /*[[${exStr}]]*/ null;
+</script>
+
+<script>
+    // 오류가 발생한 페이지에서 alert 로 오류 메세지를 바로 출력하지 않고, 로컬 스토리지에 저장,
+    // 그 후 실행되는 history.back(); 에 의해서 실행되는 페이지에서 저장된 오류메세지 찾아서 출력
+
+    localStorage.setItem('historyBackMsg', msg); // localStorage: 브라우저를 껐다켜도 유지된다.
+
+    if (exStr) {
+        sessionStorage.setItem('exStr__' + new Date(), exStr); // sessionStorage: 브라우저를 끄면 데이터가 날라간다.
+    }
+
+    // 빈 폼을 응답하는 대신 history.back(); 실행 / 경고창 뜨고 이전 페이지(원래 페이지)로 이동
+    history.back();
+</script>

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>SIMPLE</title>
+
+    <!-- 폰트어썸 불러오기 -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
+
+    <!-- 제이쿼리 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+
+    <!-- toastr 불러오기 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/2.1.4/toastr.min.js"></script>
+    <link href="https://jhs512.github.io/toastr/toastr.css" rel="stylesheet">
+
+    <link rel="stylesheet" href="/resource/global.css">
+    <script src="/resource/global.js"></script>
+
+    <!--    로그아웃 할 때 csrf 토큰이 자동으로 안 붙여져서 csrf를 만들어서 서버로 보낸다.-->
+    <meta name="_csrf" th:content="${_csrf.token}"/>
+    <meta name="_csrf_header" th:content="${_csrf.headerName}"/>
+</head>
+<body>
+
+<!--데이지 UI-->
+<link href="https://cdn.jsdelivr.net/npm/daisyui@4.0.8/dist/full.min.css" rel="stylesheet" type="text/css"/>
+<!--테일윈드-->
+<script src="https://cdn.tailwindcss.com"></script>
+
+<th:block layout:fragment="header"></th:block>
+
+<script>
+    const queryParams = getQueryParams();
+
+    if (queryParams.msg) { // url에 msg가 있으면 성공창이 뜬다. (초록색)
+        toastNotice(queryParams.msg);
+    }
+
+    if (queryParams.failMsg) { // url에 failMsg가 있으면 경고창이 뜬다. (주황색)
+        toastWarning(queryParams.failMsg)
+    }
+
+    // 일부 브라우저는 history.back(); 을 통해서 보여지는 페이지 에서는
+    // 초반 자바스크립트 실행이 스킵된다. 그것을 방지하기 위한 작업
+    // 그냥도 실행이 되고 javascript에서 history.back()을 해도 실행이된다.
+    $(window).bind("pageshow", function (event) {
+        const historyBackMsg = localStorage.getItem('historyBackMsg');
+
+        if (historyBackMsg) {
+            toastWarning(historyBackMsg);
+            localStorage.removeItem('historyBackMsg');
+        }
+    });
+</script>
+
+<main class="p-4">
+    <th:block layout:fragment="content"></th:block>
+</main>
+
+</body>
+</html>
