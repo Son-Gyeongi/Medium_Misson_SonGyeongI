@@ -14,6 +14,13 @@
     <div class="mt-2">
         <div class="badge badge-outline" th:text="${post.id}"></div>
         <span th:text="${post.title}"></span>
+<!--        일단 구분하기 쉽게 유료/무료 라고 적어두었다.-->
+        <span class="badge badge-secondary badge-outlined" th:if="${post.isPaid()}">
+            <span th:text="' 유료 글'"></span>
+        </span>
+        <span class="badge badge-info badge-outlined" th:unless="${post.isPaid()}">
+            <span th:text="' 무료 글'"></span>
+        </span>
     </div>
 
     <div class="mt-2 whitespace-pre-line" th:text="${post.body}"></div>

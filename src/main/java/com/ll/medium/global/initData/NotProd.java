@@ -44,18 +44,18 @@ public class NotProd {
         Member member3 = memberService.join("user3", "1234", false).getData();
 
         // 게시글 생성
-        postService.write("제목1", "내용1", Boolean.TRUE, member1); // 공개글
-        postService.write("제목2", "내용2", Boolean.FALSE, member1); // 비공개글
-        postService.write("제목3", "내용3", Boolean.TRUE, member1);
-        postService.write("제목4", "내용4", Boolean.TRUE, member2);
-        postService.write("제목5", "내용5", Boolean.FALSE, member2);
+        postService.write("제목1", "내용1", Boolean.TRUE, member1, true); // 공개글
+        postService.write("제목2", "내용2", Boolean.FALSE, member1, false); // 비공개글
+        postService.write("제목3", "내용3", Boolean.TRUE, member1, false);
+        postService.write("제목4", "내용4", Boolean.TRUE, member2, true);
+        postService.write("제목5", "내용5", Boolean.FALSE, member2, false);
 
         IntStream.rangeClosed(6, 35).forEach(
                 i -> {
                     String title = "제목" + i;
                     String body = "내용" + i;
 
-                    postService.write(title, body, Boolean.TRUE, member3);
+                    postService.write(title, body, Boolean.TRUE, member3, true);
                 }
         );
 
@@ -64,7 +64,16 @@ public class NotProd {
                     String title = "제목" + i;
                     String body = "내용" + i;
 
-                    postService.write(title, body, Boolean.FALSE, member3);
+                    postService.write(title, body, Boolean.FALSE, member3, false);
+                }
+        );
+
+        IntStream.rangeClosed(40, 50).forEach(
+                i -> {
+                    String title = "제목" + i;
+                    String body = "내용" + i;
+
+                    postService.write(title, body, Boolean.TRUE, member3, false);
                 }
         );
     }

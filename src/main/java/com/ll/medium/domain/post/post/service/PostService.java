@@ -58,8 +58,8 @@ public class PostService {
     }
 
     @Transactional
-    public RsData<Post> write(String title, String body, Boolean isPublished, Member author) {
-        Post post = new Post(title, body, isPublished, author);
+    public RsData<Post> write(String title, String body, Boolean isPublished, Member author, boolean isPaid) {
+        Post post = new Post(title, body, isPublished, author, isPaid);
 
         postRepository.save(post);
 

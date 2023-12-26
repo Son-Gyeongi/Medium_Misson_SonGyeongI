@@ -59,7 +59,8 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @PostMapping("/write")
     public String writePost(@Valid WriteForm writeForm) {
-        RsData<Post> post = postService.write(writeForm.getTitle(), writeForm.getBody(), writeForm.getIsPublished(), rq.getMember());
+        RsData<Post> post = postService.write(writeForm.getTitle(), writeForm.getBody(),
+                writeForm.getIsPublished(), rq.getMember(), writeForm.isPaid());
 
         // 상세 페이지로 이동
         return rq.redirect("/post/%d".formatted(post.getData().getId()), post.getMsg());

@@ -21,11 +21,13 @@ public class Post extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY) // @ManyToOne(fetch = LAZY) 를 통해서 데이터가 필요한 시점에 DB를 조회한다.
     private Member author; // 작성자 / 실제로 DB에 저장되는 건 author_id 이다.
     private Boolean isPublished; // 체크 박스
+    private boolean isPaid; // true: paid, false: free
 
-    public Post(String title, String body, Boolean isPublished, Member author) {
+    public Post(String title, String body, Boolean isPublished, Member author, boolean isPaid) {
         this.title = title;
         this.body = body;
         this.author = author;
         this.isPublished = isPublished;
+        this.isPaid = isPaid;
     }
 }
