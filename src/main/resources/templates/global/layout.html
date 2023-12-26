@@ -39,6 +39,21 @@
     <div class="navbar-end">
         <a th:if="${@rq.isLogined}" href="/post/myList" class="btn btn-ghost text-xl">
             <span th:text="|welcome ${@rq.member.username}|"></span>
+
+            <!-- 관리자 체크 -->
+            <span th:if="${@rq.member.isAdmin()}">
+                <span th:text="' 관리자'"></span>
+            </span>
+
+            <!-- 유료/일반 회원 체크 -->
+            <span th:unless="${@rq.member.isAdmin()}">
+                <span th:if="${@rq.member.isPaid()}">
+                    <span th:text="' 유료 회원'"></span>
+                </span>
+                <span th:unless="${@rq.member.isPaid()}">
+                    <span th:text="' 일반 회원'"></span>
+                </span>
+            </span>
         </a>
     </div>
 </header>

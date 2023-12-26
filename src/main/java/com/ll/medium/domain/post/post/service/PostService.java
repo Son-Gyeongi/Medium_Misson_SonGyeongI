@@ -91,7 +91,7 @@ public class PostService {
         // 로그인 하지 않은 유저, 로그인 했지만 작성자가 아닌 유저 isPublished True만 줘야함
         // 하지만 이미 리스트에는 True만 있음/ url로 직접 작성해서 들어온 사람 막기
         if (rq.getMember() == null
-        || !(post.getAuthor().getUsername().equals(rq.getMember().getUsername()))) {
+                || !(post.getAuthor().getUsername().equals(rq.getMember().getUsername()))) {
             // 공개된 글 보여주기
             return postRepository.findByIsPublishedTrueAndId(id).orElseThrow(
                     () -> new IllegalArgumentException("해당 하는 게시글이 없습니다.")

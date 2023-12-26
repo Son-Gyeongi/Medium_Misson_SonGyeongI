@@ -18,7 +18,7 @@ public class MemberService {
     private final PasswordEncoder passwordEncoder;
 
     @Transactional
-    public RsData<Member> join(String username, String password) {
+    public RsData<Member> join(String username, String password, boolean isPaid) {
         if (findByUsername(username).isPresent()) { // null 검사
             return new RsData<>("F-1", "이미 사용중인 아이디입니다.");
         }
@@ -28,6 +28,7 @@ public class MemberService {
         Member member = Member.builder()
                 .username(username)
                 .password(password)
+                .isPaid(isPaid)
                 .build();
 
         // 멤버 등록

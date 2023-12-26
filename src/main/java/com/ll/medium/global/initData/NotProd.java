@@ -38,9 +38,10 @@ public class NotProd {
         if (memberService.count()) return;
 
         // 사용자 생성
-        Member member1 = memberService.join("user1", "1234").getData();
-        Member member2 = memberService.join("user2", "1234").getData();
-        Member member3 = memberService.join("user3", "1234").getData();
+        Member admin = memberService.join("admin", "1234", true).getData();
+        Member member1 = memberService.join("user1", "1234", true).getData();
+        Member member2 = memberService.join("user2", "1234", false).getData();
+        Member member3 = memberService.join("user3", "1234", false).getData();
 
         // 게시글 생성
         postService.write("제목1", "내용1", Boolean.TRUE, member1); // 공개글
