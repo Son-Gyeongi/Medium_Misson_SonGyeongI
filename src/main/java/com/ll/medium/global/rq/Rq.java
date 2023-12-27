@@ -89,4 +89,9 @@ public class Rq { // 회원과 관련된 로직
         if (rs.isFail()) return historyBack(rs);
         return redirect(url, rs);
     }
+
+    // 회원이 미디엄에 유료가입이 되어있는지 여부 확인
+    public boolean isPaid() {
+        return member.isPaid();
+    }
 }

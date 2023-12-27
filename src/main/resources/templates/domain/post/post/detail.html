@@ -23,7 +23,14 @@
         </span>
     </div>
 
-    <div class="mt-2 whitespace-pre-line" th:text="${post.body}"></div>
+<!--    post.isPaid()는 true: 유료 글이고 false: 무료글-->
+<!--    @rq.isPaid가 true이면 유료 글을 볼 수 있고  false이면 유료글을 볼 수 없다.-->
+    <div class="mt-2 whitespace-pre-line" th:if="${@rq.isPaid() or !post.isPaid()}" th:text="${post.body}"></div>
+    <div th:unless="${@rq.isPaid() or !post.isPaid()}">
+        해당 글은 유료멤버십 전용 입니다.
+    </div>
+<!--    @rq.isPaid가 false인 회원이 유료글을 보려고 하면 '유료멤버십 전용입니다'라는 글을 보여준다.
+        th:unless는 해당 조건이 false일 때 "유료멤버십 전용 입니다." 메시지를 표시하도록 설정-->
 
     <hr class="mt-2">
 
