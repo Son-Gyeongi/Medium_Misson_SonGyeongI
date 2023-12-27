@@ -51,7 +51,7 @@ public class MemberService {
         return memberRepository.findFirstByOrderByIdDesc();
     }
 
-    public boolean count() {
-        return memberRepository.count() > 0;
+    public long count() {
+        return memberRepository.count();
     }
 }
