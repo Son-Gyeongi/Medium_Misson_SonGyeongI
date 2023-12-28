@@ -1,4 +1,4 @@
-<html layout:decorate="~{global/layout}">
+<html layout:decorate="~{global/layout}" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <title th:text="|게시글 내용 - ${post.id}. ${post.title}|"></title>
@@ -14,7 +14,6 @@
     <div class="mt-2">
         <div class="badge badge-outline" th:text="${post.id}"></div>
         <span th:text="${post.title}"></span>
-<!--        일단 구분하기 쉽게 유료/무료 라고 적어두었다.-->
         <span class="badge badge-secondary badge-outlined" th:if="${post.isPaid()}">
             <span th:text="' 유료 글'"></span>
         </span>
@@ -23,22 +22,15 @@
         </span>
     </div>
 
-<!--    post.isPaid()는 true: 유료 글이고 false: 무료글-->
-<!--    @rq.isPaid가 true이면 유료 글을 볼 수 있고  false이면 유료글을 볼 수 없다.-->
-    <div class="mt-2 whitespace-pre-line" th:if="${@rq.isPaid() or !post.isPaid()}" th:text="${post.body}"></div>
-    <div th:unless="${@rq.isPaid() or !post.isPaid()}">
-        해당 글은 유료멤버십 전용 입니다.
+    <div class="mt-2 whitespace-pre-line" th:if="${!post.isPaid() or (@rq.member != null and @rq.isPaid())}" th:text="${post.body}"></div>
+    <div th:if="${post.isPaid() and (@rq.member == null or (@rq.member != null and !@rq.isPaid()))}">
+        해당 글은 유료멤버십 전용입니다.
     </div>
-<!--    @rq.isPaid가 false인 회원이 유료글을 보려고 하면 '유료멤버십 전용입니다'라는 글을 보여준다.
-        th:unless는 해당 조건이 false일 때 "유료멤버십 전용 입니다." 메시지를 표시하도록 설정-->
 
     <hr class="mt-2">
 
     <div class="mt-2 flex gap-2 justify-center">
-        <!--<a th:if="${@postService.canModify(@rq.member, post)}" class="btn-link"
-           th:href="|/post/${post.id}/modify|">글 수정</a>-->
         <a class="btn-link" th:href="|/post/${post.id}/modify|">글 수정</a>
-        <!--        global.js에 동적으로 넘어가게 만들었다. 그래서 삭제 잘됨 -->
         <a method="DELETE" class="btn-link" th:if="${@postService.canDelete(@rq.member, post)}"
            onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/post/${post.id}/delete|">
             글 삭제
