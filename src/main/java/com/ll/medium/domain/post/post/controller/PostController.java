@@ -80,7 +80,13 @@ public class PostController {
     @PreAuthorize("isAuthenticated()")
     @GetMapping("/{id}/modify")
     public String showModify(@PathVariable Long id, Model model) {
+        // 게시글 찾기
         Post post = postService.getPost(id);
+
+        // 권한 여부 체크
+        if (!postService.canModify(rq.getMember(), post)) {
+            throw new RuntimeException("수정 권한이 없습니다.");
+        }
 
         model.addAttribute("post", post);
 
