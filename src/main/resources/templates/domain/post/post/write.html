@@ -27,15 +27,14 @@
         </div>
 
         <!-- 공개 여부 체크박스 -->
-        <div>공개 여부</div>
         <!--        체크박스 타입은 true, false 둘중에 하나라서 null 이 들어갈 일이 없다.-->
-
         <div class="form-control">
-            <label for="publicCheckbox">
-                <!--                true : 공개 / false : 비공개-->
-                <input type="checkbox" id="publicCheckbox" name="isPublished">
+            <label class="cursor-pointer">
+<!--                true : 공개 / false : 비공개-->
+                <input type="checkbox" name="isPublished" class="checkbox checkbox-primary">
+<!--                아래 코드가 있어야지 False가 저장된다. 없으니깐 null이 들어간다.-->
                 <input type="hidden" name="_isPublished" value="on"/>
-                공개
+                <span class="ml-2">게시글 공개</span>
             </label>
         </div>
 
