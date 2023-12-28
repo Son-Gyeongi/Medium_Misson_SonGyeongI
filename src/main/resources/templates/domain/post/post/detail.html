@@ -1,5 +1,4 @@
-<html layout:decorate="~{global/layout}" xmlns:th="http://www.thymeleaf.org"
->
+<html layout:decorate="~{global/layout}" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="|게시글 내용 - ${post.id}. ${post.title}|"></title>
@@ -32,8 +31,9 @@
     <hr class="mt-2">
 
     <div class="mt-2 flex gap-2 justify-center">
-        <a class="btn-link" th:href="|/post/${post.id}/modify|">글 수정</a>
-        <a method="DELETE" class="btn-link" th:if="${@postService.canDelete(@rq.member, post)}"
+        <!-- 글 작성자와 로그인한 사용자가 같은 경우에만 수정과 삭제 가능하도록 조건 추가 -->
+        <a class="btn-link" th:if="${@rq.member != null and @rq.member.username == post.author.username}" th:href="|/post/${post.id}/modify|">글 수정</a>
+        <a method="DELETE" class="btn-link" th:if="${@rq.member != null and @rq.member.username == post.author.username and @postService.canDelete(@rq.member, post)}"
            onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/post/${post.id}/delete|">
             글 삭제
         </a>
