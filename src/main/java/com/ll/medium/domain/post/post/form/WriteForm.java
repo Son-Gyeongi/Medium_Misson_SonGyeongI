@@ -10,5 +10,5 @@ public class WriteForm {
     @NotBlank
     private String body;
     private Boolean isPublished; // 체크 박스, true 공개 / false 비공개
-    private boolean isPaid; // true: paid, false: free
+    private Boolean isPaid; // true: paid, false: free
 }

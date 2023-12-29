@@ -60,7 +60,7 @@ public class PostController {
     @PostMapping("/write")
     public String writePost(@Valid WriteForm writeForm) {
         RsData<Post> post = postService.write(writeForm.getTitle(), writeForm.getBody(),
-                writeForm.getIsPublished(), rq.getMember(), writeForm.isPaid());
+                writeForm.getIsPublished(), rq.getMember(), writeForm.getIsPaid());
 
         // 상세 페이지로 이동
         return rq.redirect("/post/%d".formatted(post.getData().getId()), post.getMsg());
@@ -106,7 +106,8 @@ public class PostController {
         }
 
         // 게시글 수정
-        postService.modify(post, modifyForm.getTitle(), modifyForm.getBody(), modifyForm.getIsPublished(), rq.getMember());
+        postService.modify(post, modifyForm.getTitle(), modifyForm.getBody(),
+                modifyForm.getIsPublished(), modifyForm.getIsPaid(), rq.getMember());
 
         return rq.redirect("/post/%d".formatted(id), "%d번 게시글이 수정되었습니다.".formatted(id));
     }

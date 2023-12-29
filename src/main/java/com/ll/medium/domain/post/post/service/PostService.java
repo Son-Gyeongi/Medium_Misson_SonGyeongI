@@ -58,7 +58,7 @@ public class PostService {
     }
 
     @Transactional
-    public RsData<Post> write(String title, String body, Boolean isPublished, Member author, boolean isPaid) {
+    public RsData<Post> write(String title, String body, Boolean isPublished, Member author, Boolean isPaid) {
         Post post = new Post(title, body, isPublished, author, isPaid);
 
         postRepository.save(post);
@@ -104,11 +104,12 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public void modify(Post post, String title, String body, Boolean isPublished, Member author) {
+    public void modify(Post post, String title, String body, Boolean isPublished, Boolean isPaid, Member author) {
         post.setTitle(title);
         post.setBody(body);
         post.setAuthor(author);
         post.setIsPublished(isPublished);
+        post.setIsPaid(isPaid);
     }
 
     // 게시글 삭제

@@ -14,17 +14,17 @@
     <div class="mt-2">
         <div class="badge badge-outline" th:text="${post.id}"></div>
         <span th:text="${post.title}"></span>
-        <span class="badge badge-secondary badge-outlined" th:if="${post.isPaid()}">
+        <span class="badge badge-secondary badge-outlined" th:if="${post.isPaid}">
             <span th:text="' 유료 글'"></span>
         </span>
-        <span class="badge badge-info badge-outlined" th:unless="${post.isPaid()}">
+        <span class="badge badge-info badge-outlined" th:unless="${post.isPaid}">
             <span th:text="' 무료 글'"></span>
         </span>
     </div>
 
-    <div class="mt-2 whitespace-pre-line" th:if="${!post.isPaid() or (@rq.member != null and @rq.isPaid())}"
+    <div class="mt-2 whitespace-pre-line" th:if="${!post.isPaid or (@rq.member != null and @rq.isPaid)}"
          th:text="${post.body}"></div>
-    <div th:if="${post.isPaid() and (@rq.member == null or (@rq.member != null and !@rq.isPaid()))}">
+    <div th:if="${post.isPaid and (@rq.member == null or (@rq.member != null and !@rq.isPaid))}">
         해당 글은 유료멤버십 전용입니다.
     </div>
 
