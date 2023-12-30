@@ -32,8 +32,9 @@
 
     <div class="mt-2 flex gap-2 justify-center">
         <!-- 글 작성자와 로그인한 사용자가 같은 경우에만 수정과 삭제 가능하도록 조건 추가 -->
-        <a class="btn-link" th:if="${@rq.member != null and @rq.member.username == post.author.username}" th:href="|/post/${post.id}/modify|">글 수정</a>
-        <a method="DELETE" class="btn-link" th:if="${@rq.member != null and @rq.member.username == post.author.username and @postService.canDelete(@rq.member, post) or @rq.member.isAdmin()}"
+        <!-- Elvis 연산자를 사용하여 @rq.member가 null인 경우 false를 반환하도록 함 -->
+        <a class="btn-link" th:if="${(@rq.member != null ?: false) and (@rq.member.username == post.author.username or @rq.member.isAdmin())}" th:href="|/post/${post.id}/modify|">글 수정</a>
+        <a method="DELETE" class="btn-link" th:if="${(@rq.member != null ?: false) and (@rq.member.username == post.author.username and @postService.canDelete(@rq.member, post) or @rq.member.isAdmin())}"
            onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/post/${post.id}/delete|">
             글 삭제
         </a>

@@ -2,6 +2,7 @@ package com.ll.medium.domain.post.post.entity;
 
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.global.jpa.baseEntity.BaseEntity;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
@@ -17,6 +18,7 @@ import lombok.experimental.SuperBuilder;
 @ToString(callSuper = true) // callSuper = true를 설정하여 부모 클래스인 BaseEntity의 toString() 메서드도 포함
 public class Post extends BaseEntity {
     private String title; // 게시글 제목
+    @Column(columnDefinition = "TEXT")
     private String body; // 게시글 내용
     @ManyToOne(fetch = FetchType.LAZY) // @ManyToOne(fetch = LAZY) 를 통해서 데이터가 필요한 시점에 DB를 조회한다.
     private Member author; // 작성자 / 실제로 DB에 저장되는 건 author_id 이다.
