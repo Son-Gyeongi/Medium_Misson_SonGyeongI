@@ -39,6 +39,65 @@
             글 삭제
         </a>
     </div>
+    <!-- 댓글 시작 -->
+    <h1 class="font-bold mt-3 mb-2">
+        <i class="fa-solid fa-comment"></i> 댓글
+    </h1>
+
+    <form th:action="|/comment/write/${post.id}|" class="flex flex-col gap-4" method="POST"
+          onsubmit="submitWriteCommentForm(this); return false;">
+        <div class="form-control mb-5">
+            <textarea name="comment" rows="1" maxlength="1000" placeholder="댓글을 작성해주세요."
+                      class="textarea textarea-bordered mb-3"></textarea>
+            <button class="btn btn-primary btn-block" type="submit">
+                댓글 작성
+            </button>
+        </div>
+    </form>
+
+    <div th:each="comment : ${post.comments}">
+        <!-- 댓글 내용 -->
+        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-2">
+            <div>
+                <span th:text="${comment.comment}" class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"></span>
+            </div>
+            <!-- 댓글 작성자와 로그인한 사용자가 같은 경우에만 수정 및 삭제 가능하도록 조건 추가 -->
+            <div th:if="${(@rq.member != null ?: false) and (@rq.member.username == comment.author.username or @rq.member.isAdmin())}"
+                 class="flex gap-2 items-center">
+                <a th:href="|/comment/${comment.id}/edit|" class="btn-link">댓글 수정</a>
+                <a method="DELETE" class="btn-link" th:href="|/comment/${comment.id}/delete|"
+                   onclick="return confirm('정말로 삭제하시겠습니까?');">
+                    댓글 삭제
+                </a>
+            </div>
+            <div>
+                <span th:text="| by ${comment.author.username}|" class="font-normal text-gray-700 dark:text-gray-400"></span>
+            </div>
+        </div>
+    </div>
+
+<!--    https://flowbite.com/docs/components/card/
+        <a href="#" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">-->
+
+<!--        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>-->
+<!--        <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>-->
+<!--    </a>-->
+
+    <script>
+        function submitWriteCommentForm(form) {
+            form.body.value = form.body.value.trim();
+
+            if (form.body.value.length === 0) {
+                toastWarning('댓글을 작성해주세요.');
+                form.body.focus();
+
+                return;
+            }
+
+            form.submit();
+        }
+    </script>
+    <!-- 댓글 끝 -->
 </div>
 </body>
 </html>

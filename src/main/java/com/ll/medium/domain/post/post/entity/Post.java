@@ -1,13 +1,13 @@
 package com.ll.medium.domain.post.post.entity;
 
 import com.ll.medium.domain.member.member.entity.Member;
+import com.ll.medium.domain.post.comment.entity.Comment;
 import com.ll.medium.global.jpa.baseEntity.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
 import lombok.*;
 import lombok.experimental.SuperBuilder;
+
+import java.util.List;
 
 @Entity // 해당 클래스가 엔티티임을 의미
 @SuperBuilder // 빌더 패턴을 자동으로 생성해주는 기능, 부모 클래스인 BaseEntity에서도 빌더 패턴 사용 가능
@@ -24,6 +24,8 @@ public class Post extends BaseEntity {
     private Member author; // 작성자 / 실제로 DB에 저장되는 건 author_id 이다.
     private Boolean isPublished; // 글 공개 여부, 체크 박스
     private Boolean isPaid; // true: paid, false: free
+    @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
+    private List<Comment> comments;
 
     public Post(String title, String body, Boolean isPublished, Member author, Boolean isPaid) {
         this.title = title;
