@@ -9,7 +9,10 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 @Controller
 @RequiredArgsConstructor
@@ -22,20 +25,27 @@ public class CommentController {
     @PostMapping("/write/{postId}")
     @PreAuthorize("isAuthenticated()")
     public String writeComment(@Valid WriteCommentForm writeCommentForm, @PathVariable Long postId) {
-        System.out.println("댓글 : "+writeCommentForm.getComment());
         RsData<Comment> write = commentService.write(rq.getMember(), writeCommentForm.getComment(), postId);
 
         // 해당 게시글로 이동
         return rq.redirect("/post/%d".formatted(write.getData().getPost().getId()), write.getMsg());
     }
 
-    // 댓글 모두 보여주기
-//    @GetMapping("/{postId}") // postId : 게시글ID
-//    public String showComment(@PathVariable Long postId, Model model) {
-//        List<Comment> comments = commentService.findAll(postId);
-//
-//        model.addAttribute("comments", comments);
-//
-//        return "domain/post/post/detail";
-//    }
+    // 댓글 모두 보여주기 - PostController에서 게시글 상세보기할 때 댓글 확인 가능
+
+    // 댓글 삭제
+    @DeleteMapping("/{id}/delete")
+    @PreAuthorize("isAuthenticated()")
+    public String deleteComment(@PathVariable Long id) {
+        // 게시글이 존재 여부
+        Comment comment = commentService.getComment(id);
+
+        // 권한 여부 체크
+        if (!commentService.canDelete(rq.getMember(), comment))
+            throw new RuntimeException("삭제 권한이 없습니다.");
+
+        commentService.delete(id);
+
+        return rq.redirect("/post/%d".formatted(comment.getPost().getId()), "댓글이 삭제되었습니다.");
+    }
 }

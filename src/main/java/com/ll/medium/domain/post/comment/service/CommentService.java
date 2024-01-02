@@ -44,4 +44,20 @@ public class CommentService {
 
         return post.getComments();
     }
+
+    @Transactional
+    public void delete(Long id) {
+        commentRepository.deleteById(id);
+    }
+
+    public Comment getComment(Long id) {
+        return commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("해당하는 댓글이 없습니다"));
+    }
+
+    public boolean canDelete(Member author, Comment comment) {
+        if (author == null) return false;
+
+        return comment.getAuthor().equals(author);
+    }
 }
