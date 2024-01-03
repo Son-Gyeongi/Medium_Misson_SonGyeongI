@@ -26,6 +26,7 @@ public class Post extends BaseEntity {
     private Boolean isPaid; // true: paid, false: free
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
+    private int viewCount = 0;
 
     public Post(String title, String body, Boolean isPublished, Member author, Boolean isPaid) {
         this.title = title;

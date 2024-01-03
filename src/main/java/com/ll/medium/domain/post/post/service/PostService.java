@@ -85,6 +85,7 @@ public class PostService {
     }
 
     // 게시글 상세 조회
+    @Transactional
     public Post getDetailPost(Long id) {
         Post post = getPost(id);
 
@@ -93,6 +94,7 @@ public class PostService {
         if (rq.getMember() == null
                 || !(post.getAuthor().getUsername().equals(rq.getMember().getUsername()))) {
             // 공개된 글 보여주기
+            post.setViewCount(post.getViewCount() +1); // 조회수
             return postRepository.findByIsPublishedTrueAndId(id).orElseThrow(
                     () -> new IllegalArgumentException("해당 하는 게시글이 없습니다.")
             );

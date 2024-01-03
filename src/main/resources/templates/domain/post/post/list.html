@@ -25,6 +25,7 @@
             <td class="text-start">
                 <!--            타임리프는 문자열을 연결(concatenation)할 때 | 문자를 사용 -->
                 <a th:href="@{|/post/${post.id}|}" th:text="${post.title}"></a>
+                <div class="badge badge-success" th:text="|조회수 ${post.viewCount}|"></div>
                 <!--<span class="text-danger small ms-2"
                       th:if="${#lists.size(post.answerList) > 0}"
                       th:text="${#lists.size(post.answerList)}">
