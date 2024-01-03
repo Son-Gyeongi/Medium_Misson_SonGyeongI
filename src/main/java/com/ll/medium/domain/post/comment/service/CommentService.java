@@ -39,12 +39,20 @@ public class CommentService {
         );
     }
 
+    // 모든 댓글 가져오기
     public List<Comment> findAll(Long postId) {
         Post post = postService.getPost(postId);
 
         return post.getComments();
     }
 
+    // 댓글 수정
+    @Transactional
+    public void modify(Comment comment, String content, Member author) {
+        comment.setComment(content);
+    }
+
+    // 댓글 삭제
     @Transactional
     public void delete(Long id) {
         commentRepository.deleteById(id);
@@ -53,6 +61,12 @@ public class CommentService {
     public Comment getComment(Long id) {
         return commentRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("해당하는 댓글이 없습니다"));
+    }
+
+    public boolean canModify(Member author, Comment comment) {
+        if (author == null) return false;
+
+        return comment.getAuthor().equals(author);
     }
 
     public boolean canDelete(Member author, Comment comment) {

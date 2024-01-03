@@ -95,7 +95,7 @@ public class PostController {
 
     // 게시글 수정 POST
     @PreAuthorize("isAuthenticated()")
-    @PutMapping("{id}/modify")
+    @PutMapping("/{id}/modify")
     public String modifyPost(@Valid ModifyForm modifyForm, @PathVariable Long id) {
         // 게시글 존재 여부
         Post post = postService.getPost(id);

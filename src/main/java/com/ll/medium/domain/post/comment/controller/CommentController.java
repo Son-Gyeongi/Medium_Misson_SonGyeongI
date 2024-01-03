@@ -9,10 +9,8 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,6 +30,41 @@ public class CommentController {
     }
 
     // 댓글 모두 보여주기 - PostController에서 게시글 상세보기할 때 댓글 확인 가능
+
+    // 댓글 수정 GET
+    @GetMapping("/{id}/modify")
+    @PreAuthorize("isAuthenticated()")
+    public String showModifyComment(@PathVariable Long id, Model model) {
+        Comment comment = commentService.getComment(id);
+
+        // 권한 여부 체크
+        if (!commentService.canModify(rq.getMember(), comment)) {
+            throw new RuntimeException("수정 권한이 없습니다.");
+        }
+
+        model.addAttribute("comment", comment);
+        model.addAttribute("post", comment.getPost());
+
+        return "domain/comment/comment/modify";
+    }
+
+    // 댓글 수정 POST
+    @PutMapping("/{id}/modify")
+    @PreAuthorize("isAuthenticated()")
+    public String modifyComment(@PathVariable Long id) {
+        // 게시글 존재 여부
+        Comment comment = commentService.getComment(id);
+
+        // 권한 여부 체크
+        if (!commentService.canModify(rq.getMember(), comment)) {
+            throw new RuntimeException("수정 권한이 없습니다.");
+        }
+
+        // 게시글 수정
+        commentService.modify(comment, comment.getComment(), rq.getMember());
+
+        return rq.redirect("/post/%d".formatted(comment.getPost().getId()), "댓글이 수정되었습니다.");
+    }
 
     // 댓글 삭제
     @DeleteMapping("/{id}/delete")
