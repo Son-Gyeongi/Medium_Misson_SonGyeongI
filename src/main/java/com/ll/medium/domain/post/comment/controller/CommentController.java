@@ -1,6 +1,7 @@
 package com.ll.medium.domain.post.comment.controller;
 
 import com.ll.medium.domain.post.comment.entity.Comment;
+import com.ll.medium.domain.post.comment.form.ModifyCommentForm;
 import com.ll.medium.domain.post.comment.form.WriteCommentForm;
 import com.ll.medium.domain.post.comment.service.CommentService;
 import com.ll.medium.global.rq.Rq;
@@ -34,7 +35,7 @@ public class CommentController {
     // 댓글 수정 GET
     @GetMapping("/{id}/modify")
     @PreAuthorize("isAuthenticated()")
-    public String showModifyComment(@PathVariable Long id, Model model) {
+    public String showModifyComment(ModifyCommentForm form, @PathVariable Long id, Model model) {
         Comment comment = commentService.getComment(id);
 
         // 권한 여부 체크
@@ -45,13 +46,13 @@ public class CommentController {
         model.addAttribute("comment", comment);
         model.addAttribute("post", comment.getPost());
 
-        return "domain/comment/comment/modify";
+        return "domain/post/comment/modifyComment";
     }
 
     // 댓글 수정 POST
     @PutMapping("/{id}/modify")
     @PreAuthorize("isAuthenticated()")
-    public String modifyComment(@PathVariable Long id) {
+    public String modifyComment(ModifyCommentForm form, @PathVariable Long id) {
         // 게시글 존재 여부
         Comment comment = commentService.getComment(id);
 
@@ -61,7 +62,7 @@ public class CommentController {
         }
 
         // 게시글 수정
-        commentService.modify(comment, comment.getComment(), rq.getMember());
+        commentService.modify(comment, form.getComment(), rq.getMember());
 
         return rq.redirect("/post/%d".formatted(comment.getPost().getId()), "댓글이 수정되었습니다.");
     }
