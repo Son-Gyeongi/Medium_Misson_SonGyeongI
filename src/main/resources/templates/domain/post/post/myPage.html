@@ -21,7 +21,7 @@
         <!--        테이블 내용을 가운데 정렬-->
         <tr class="text-center" th:each="post, loop : ${paging}">
             <!--            게시물 번호 공식, 내 게시글 id 보여주기-->
-<!--            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>-->
+            <!--            <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>-->
             <td th:text="${post.id}"></td>
             <!--            제목을 왼쪽 정렬-->
             <td class="text-start">

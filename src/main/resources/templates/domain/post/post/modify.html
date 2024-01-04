@@ -37,7 +37,8 @@
         <div class="form-control">
             <label class="cursor-pointer">
                 <!--                true : 공개 / false : 비공개-->
-                <input type="checkbox" name="isPublished" class="checkbox checkbox-primary" th:checked="${post.isPublished}">
+                <input type="checkbox" name="isPublished" class="checkbox checkbox-primary"
+                       th:checked="${post.isPublished}">
                 <!--                아래 코드가 있어야지 False가 저장된다. 없으니깐 null이 들어간다.-->
                 <input type="hidden" name="_isPublished" value="on"/>
                 <span class="ml-2">게시글 공개</span>
