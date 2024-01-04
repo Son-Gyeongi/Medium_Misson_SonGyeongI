@@ -8,6 +8,7 @@ import lombok.*;
 import lombok.experimental.SuperBuilder;
 
 import java.util.List;
+import java.util.Set;
 
 @Entity // 해당 클래스가 엔티티임을 의미
 @SuperBuilder // 빌더 패턴을 자동으로 생성해주는 기능, 부모 클래스인 BaseEntity에서도 빌더 패턴 사용 가능
@@ -26,7 +27,9 @@ public class Post extends BaseEntity {
     private Boolean isPaid; // true: paid, false: free
     @OneToMany(mappedBy = "post", cascade = CascadeType.REMOVE)
     private List<Comment> comments;
-    private int viewCount = 0;
+    private int viewCount = 0; // 조회수
+    @ManyToMany
+    Set<Member> voter; // 추천인, Set은 중복이 없다.
 
     public Post(String title, String body, Boolean isPublished, Member author, Boolean isPaid) {
         this.title = title;

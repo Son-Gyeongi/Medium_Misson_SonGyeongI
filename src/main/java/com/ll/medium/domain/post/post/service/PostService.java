@@ -132,4 +132,12 @@ public class PostService {
 
         return post.getAuthor().equals(author);
     }
+
+    // 게시글 추천
+    @Transactional
+    public void vote(Post post, Member voter) {
+        // 게시글에 추천한 사람이 있다면 게시글 추천 취소
+        if (postRepository.existsPostByIdAndVoterId(post.getId(), voter.getId())) post.getVoter().remove(voter);
+        else post.getVoter().add(voter); // 게시글 추천
+    }
 }

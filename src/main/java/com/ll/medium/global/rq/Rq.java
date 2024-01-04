@@ -73,6 +73,10 @@ public class Rq { // 회원과 관련된 로직
         return redirect(path, rs.getMsg());
     }
 
+    public String redirect(String path) {
+        return "redirect:" + path;
+    }
+
     // 회원가입 중복시 js.html을 갔다가 뒤로가기로 다시 회원가입 폼을 보여준다.
     public String historyBack(String msg) {
         resp.setStatus(400);

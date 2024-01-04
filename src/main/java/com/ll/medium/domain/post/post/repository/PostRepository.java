@@ -30,4 +30,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 내 글 목록 조회
     Page<Post> findAllByAuthorIdOrderByCreatedDateDesc(Long authorId, Pageable pageable);
+
+    // 게시글 추천인 찾기
+    // Post_Voter 테이블에서 post_id와 voter_id로 로우가 존재하는지 확인하는 메서드
+    boolean existsPostByIdAndVoterId(Long postId, Long voterId);
 }

@@ -1,5 +1,6 @@
 package com.ll.medium.domain.post.post.controller;
 
+import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.post.post.entity.Post;
 import com.ll.medium.domain.post.post.form.ModifyForm;
 import com.ll.medium.domain.post.post.form.WriteForm;
@@ -127,5 +128,16 @@ public class PostController {
         postService.deletePost(post);
 
         return rq.redirect("/", "%d번 게시글이 삭제되었습니다.".formatted(id));
+    }
+
+    // 게시글 추천
+    @PreAuthorize("isAuthenticated()")
+    @GetMapping("/vote/{id}")
+    public String postVote(@PathVariable Long id) {
+        Post post = postService.getPost(id);
+        Member voter = rq.getMember();
+
+        postService.vote(post, voter);
+        return rq.redirect("/post/%d".formatted(post.getId()));
     }
 }
