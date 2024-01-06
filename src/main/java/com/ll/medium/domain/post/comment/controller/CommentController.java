@@ -10,7 +10,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 @Controller
@@ -20,7 +19,7 @@ public class CommentController {
     private final CommentService commentService;
     private final Rq rq;
 
-    // 댓글 작성 POST
+    // 댓글 작성
     @PostMapping("/write/{postId}")
     @PreAuthorize("isAuthenticated()")
     public String writeComment(@Valid WriteCommentForm writeCommentForm, @PathVariable Long postId) {
@@ -32,27 +31,12 @@ public class CommentController {
 
     // 댓글 모두 보여주기 - PostController에서 게시글 상세보기할 때 댓글 확인 가능
 
-    // 댓글 수정 GET
-    @GetMapping("/{id}/modify")
+    // 댓글 수정
+    @PostMapping("/{id}/modify")
     @PreAuthorize("isAuthenticated()")
-    public String showModifyComment(ModifyCommentForm form, @PathVariable Long id, Model model) {
-        Comment comment = commentService.getComment(id);
+    public String modifyComment(@RequestBody @Valid ModifyCommentForm form, @PathVariable Long id) {
+        // 프론트에서 json으로 보낼 경우 백에서 @RequestBody로 받아야 한다.
 
-        // 권한 여부 체크
-        if (!commentService.canModify(rq.getMember(), comment)) {
-            throw new RuntimeException("수정 권한이 없습니다.");
-        }
-
-        model.addAttribute("comment", comment);
-        model.addAttribute("post", comment.getPost());
-
-        return "domain/post/comment/modifyComment";
-    }
-
-    // 댓글 수정 POST
-    @PutMapping("/{id}/modify")
-    @PreAuthorize("isAuthenticated()")
-    public String modifyComment(ModifyCommentForm form, @PathVariable Long id) {
         // 게시글 존재 여부
         Comment comment = commentService.getComment(id);
 

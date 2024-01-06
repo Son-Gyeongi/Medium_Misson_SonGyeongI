@@ -65,16 +65,25 @@
 
     <div th:each="comment : ${post.comments}">
         <!-- 댓글 내용 -->
-        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-2">
+        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-2 comment-container"
+             th:attr="data-comment-id=${comment.id}">
+<!--            속성 추가 : 댓글id 받아오기-->
             <div>
                 <span th:text="${comment.comment}"
-                      class="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"></span>
+                      class="text-gray-800 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"></span>
             </div>
             <!-- 댓글 작성자와 로그인한 사용자가 같은 경우에만 수정 및 삭제 가능하도록 조건 추가 -->
             <div th:if="${(@rq.member != null ?: false) and (@rq.member.username == comment.author.username or @rq.member.isAdmin())}"
                  class="flex gap-2 items-center">
-                <a th:href="|/comment/${comment.id}/modify|" class="btn-link">댓글 수정</a>
-                <a method="DELETE" class="btn-link" th:href="|/comment/${comment.id}/delete|"
+                <!--                <a th:href="|/comment/${comment.id}/modify|" class="btn-link">댓글 수정</a>-->
+                <a href="javascript:void(0);" class="edit text-blue-500 hover:underline" th:text="수정"></a>
+                <span class="edit-buttons mx-2" style="display:none;">|</span>
+                <a href="javascript:void(0);" class="update text-blue-500 hover:underline"
+                   style="display:none;">수정하기</a>
+                <span class="cancel-buttons mx-2" style="display:none;">|</span>
+                <a href="javascript:void(0);" class="cancel text-red-500 hover:underline" style="display:none;">취소하기</a>
+                <span class="mx-2">|</span>
+                <a method="DELETE" class="btn-link delete" th:href="|/comment/${comment.id}/delete|"
                    onclick="return confirm('정말로 삭제하시겠습니까?');">
                     댓글 삭제
                 </a>
@@ -112,6 +121,112 @@
         Array.from(recommend_elements).forEach(function (element) {
             element.addEventListener('click', function () {
                 location.href = this.dataset.uri;
+            });
+        });
+
+        // 수정 버튼 누를 때
+        const edit_elements = document.querySelectorAll(".edit");
+        edit_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                // 클래스 이름이 comment-container 인 엘리먼트를 가져온다. 하위 엘리먼트도 같이 가져온다.
+                const commentContainer = this.closest('.comment-container');
+                if (!commentContainer) {
+                    console.error("comment-container를 찾을 수 없습니다.");
+                    return;
+                }
+
+                const commentContent = commentContainer.querySelector('.text-gray-800');
+                if (!commentContent) {
+                    console.error("comment-content2를 찾을 수 없습니다.");
+                    return;
+                }
+                const originalContent = commentContent.innerText.trim();
+
+                const textarea = document.createElement('textarea');
+                textarea.value = originalContent;
+                textarea.classList.add('w-full', 'px-3', 'py-2', 'border', 'rounded-md', 'focus:outline-none', 'focus:shadow-outline-blue');
+
+                // data-original-content 속성을 사용하여 원래 내용을 저장
+                textarea.setAttribute('data-original-content', originalContent);
+
+                commentContent.replaceWith(textarea);
+
+                element.style.display = 'none';
+                commentContainer.querySelector('.edit-buttons').style.display = 'inline';
+                commentContainer.querySelector('.cancel-buttons').style.display = 'inline';
+                commentContainer.querySelector('.update').style.display = 'inline';
+                commentContainer.querySelector('.cancel').style.display = 'inline';
+                commentContainer.querySelector('.delete').style.display = 'none';
+            });
+        });
+
+        const csrfToken = document.querySelector("meta[name='_csrf']").content;
+        const csrfHeader = document.querySelector("meta[name='_csrf_header']").content;
+
+        // 댓글 수정 버튼 클릭 시
+        const update_elements = document.querySelectorAll(".update");
+        update_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                const commentContainer = this.closest('.comment-container');
+                if (!commentContainer) {
+                    console.error("comment-container를 찾을 수 없습니다.");
+                    return;
+                }
+                const textarea = commentContainer.querySelector('textarea');
+                if (!textarea) {
+                    console.error("textarea를 찾을 수 없습니다.");
+                    return;
+                }
+                // 수정한 내용 저장
+                const updatedContent = textarea.value;
+
+                // 댓글 ID 추출 / 가져온 html에서 data-comment-id 속성에 있는 값을 가져온다.
+                const commentId = commentContainer.getAttribute('data-comment-id');
+
+                // AJAX를 사용하여 서버로 댓글 업데이트 요청
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `/comment/${commentId}/modify`, true);
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                xhr.setRequestHeader(csrfHeader, csrfToken); // CSRF 토큰 추가
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        location.reload();
+                    } else {
+                        console.error("댓글 업데이트에 실패하였습니다.");
+                    }
+                };
+                // 프론트와 백 데이터 주고 받을 때 데이터 이름(comment) 맞춰야 함
+                const data = JSON.stringify({comment: updatedContent}); // Json형식으로 data를 보낸다. 백에서 받을 때는 @RequestBody로 받아야 한다.
+                xhr.send(data);
+            });
+        });
+
+        const cancel_elements = document.querySelectorAll(".cancel");
+        cancel_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                const commentContainer = this.closest('.comment-container');
+                if (!commentContainer) {
+                    console.error("comment-container를 찾을 수 없습니다.");
+                    return;
+                }
+                const textarea = commentContainer.querySelector('textarea');
+                if (!textarea) {
+                    console.error("textarea를 찾을 수 없습니다.");
+                    return;
+                }
+                const originalContent = textarea.getAttribute('data-original-content');
+
+                const originalCommentContent = document.createElement('p');
+                originalCommentContent.classList.add('text-gray-800');
+                originalCommentContent.innerText = originalContent;
+                textarea.replaceWith(originalCommentContent);
+
+                commentContainer.querySelector('.edit').style.display = 'inline';
+                commentContainer.querySelector('.update').style.display = 'none';
+                commentContainer.querySelector('.cancel').style.display = 'none';
+                commentContainer.querySelector('.delete').style.display = 'inline';
+                commentContainer.querySelector('.edit-buttons').style.display = 'none';
+                commentContainer.querySelector('.cancel-buttons').style.display = 'none';
             });
         });
     </script>
