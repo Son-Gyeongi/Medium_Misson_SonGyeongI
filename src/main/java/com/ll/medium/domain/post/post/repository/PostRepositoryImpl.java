@@ -73,6 +73,9 @@ public class PostRepositoryImpl implements PostRepositoryCustom {
             }
         }
 
+        // 여기서 isPublished가 TRUE인 조건을 추가
+        builder.and(post.isPublished.isTrue());
+
         JPAQuery<Post> postQuery = jpaQueryFactory
                 .selectDistinct(post) // SELECT Distinct A.*
                 .from(post)

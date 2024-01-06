@@ -38,11 +38,6 @@
                 <!--            타임리프는 문자열을 연결(concatenation)할 때 | 문자를 사용 -->
                 <a th:href="@{|/post/${post.id}|}" th:text="${post.title}"></a>
                 <div class="badge badge-success" th:text="|조회수 ${post.viewCount}|"></div>
-                <!--<span class="text-danger small ms-2"
-                      th:if="${#lists.size(post.answerList) > 0}"
-                      th:text="${#lists.size(post.answerList)}">
-&lt;!&ndash;                    #list.size(이터러블객체)는 이터러블 객체의 사이즈를 반환하는 타임리프의 유틸리티&ndash;&gt;
-                </span>-->
             </td>
             <td>
                 <a th:if="${post.author != null}" th:href="@{|/b/${post.author.username}|}"
