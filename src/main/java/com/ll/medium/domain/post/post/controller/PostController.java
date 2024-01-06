@@ -59,9 +59,6 @@ public class PostController {
                 ));
 
         Page<Post> itemsPage = postService.search(kwTypes, kw, pageable);
-        System.out.println("hey");
-        System.out.println(itemsPage.stream().toList());
-        System.out.println(itemsPage.getContent());
         model.addAttribute("itemsPage", itemsPage);
         model.addAttribute("kwTypesMap", kwTypesMap);
         model.addAttribute("paging", itemsPage);
