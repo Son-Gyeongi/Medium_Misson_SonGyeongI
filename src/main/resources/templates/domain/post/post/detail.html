@@ -75,7 +75,8 @@
             <!-- 댓글 작성자와 로그인한 사용자가 같은 경우에만 수정 및 삭제 가능하도록 조건 추가 -->
             <div th:if="${(@rq.member != null ?: false) and (@rq.member.username == comment.author.username or @rq.member.isAdmin())}"
                  class="flex gap-2 items-center">
-                <!--                <a th:href="|/comment/${comment.id}/modify|" class="btn-link">댓글 수정</a>-->
+                <!--      <a th:href="|/comment/${comment.id}/modify|" class="btn-link">댓글 수정</a>-->
+                <!-- 수정버튼 누르면 나타나는 코드 시작-->
                 <a href="javascript:void(0);" class="edit text-blue-500 hover:underline" th:text="수정"></a>
                 <span class="edit-buttons mx-2" style="display:none;">|</span>
                 <a href="javascript:void(0);" class="update text-blue-500 hover:underline"
@@ -83,6 +84,7 @@
                 <span class="cancel-buttons mx-2" style="display:none;">|</span>
                 <a href="javascript:void(0);" class="cancel text-red-500 hover:underline" style="display:none;">취소하기</a>
                 <span class="mx-2">|</span>
+                <!-- 수정버튼 누르면 나타나는 코드 끝-->
                 <a method="DELETE" class="btn-link delete" th:href="|/comment/${comment.id}/delete|"
                    onclick="return confirm('정말로 삭제하시겠습니까?');">
                     댓글 삭제
