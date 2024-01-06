@@ -9,7 +9,7 @@
     <h1 class="font-bold mb-2"><i class="fa-solid fa-list"></i> 게시글 목록</h1>
     <!-- 추가된 부분: 검색 폼 -->
     <div>
-        <form action="/list" method="get">
+        <form action="/post/list" method="get">
             <div style="display:flex; gap:10px;">
                 <label><input type="checkbox" name="kwTypes" value="title" th:checked="${kwTypesMap['title']}"><span> 제목</span></label>
                 <label><input type="checkbox" name="kwTypes" value="body" th:checked="${kwTypesMap['body']}"><span> 내용</span></label>
