@@ -7,6 +7,18 @@
 <body>
 <div layout:fragment="content">
     <h1 class="font-bold mb-2"><i class="fa-solid fa-list"></i> 게시글 목록</h1>
+    <!-- 추가된 부분: 검색 폼 -->
+    <div>
+        <form action="/list" method="get">
+            <div style="display:flex; gap:10px;">
+                <label><input type="checkbox" name="kwTypes" value="title" th:checked="${kwTypesMap['title']}"><span>제목</span></label>
+                <label><input type="checkbox" name="kwTypes" value="body" th:checked="${kwTypesMap['body']}"><span>내용</span></label>
+                <!-- 원하는 검색 유형에 따라 추가할 수 있습니다. -->
+            </div>
+            <input type="search" name="kw" placeholder="검색어" th:value="${param.kw}">
+            <input type="submit" value="검색">
+        </form>
+    </div>
     <table class="table">
         <thead class="table-dark">
         <tr class="text-center">
@@ -18,7 +30,7 @@
         </thead>
         <tbody>
         <!--        테이블 내용을 가운데 정렬-->
-        <tr class="text-center" th:each="post, loop : ${paging}">
+        <tr class="text-center" th:each="post, loop : ${itemsPage.content}">
             <!--            게시물 번호 공식-->
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <!--            제목을 왼쪽 정렬-->

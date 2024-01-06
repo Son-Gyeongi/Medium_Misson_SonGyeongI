@@ -3,6 +3,7 @@ package com.ll.medium.global.rq;
 import com.ll.medium.domain.member.member.entity.Member;
 import com.ll.medium.domain.member.member.service.MemberService;
 import com.ll.medium.global.rsData.RsData;
+import com.ll.medium.standard.util.Ut;
 import jakarta.annotation.PostConstruct;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -97,5 +98,18 @@ public class Rq { // 회원과 관련된 로직
     // 회원이 미디엄에 유료가입이 되어있는지 여부 확인
     public boolean isPaid() {
         return member.isPaid();
+    }
+
+    // 요청온 url의 queryString
+    public String getCurrentQueryStringWithoutParam(String paramName) {
+        String queryString = req.getQueryString();
+
+        if (queryString == null) {
+            return "";
+        }
+
+        queryString = Ut.url.deleteQueryParam(queryString, paramName);
+
+        return queryString;
     }
 }

@@ -10,12 +10,19 @@ import com.ll.medium.global.rsData.RsData;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/post")
@@ -25,11 +32,39 @@ public class PostController {
     private final Rq rq;
 
     // 공개된 글만 노출
-    @GetMapping("/list")
+    /*@GetMapping("/list")
     public String getPosts(Model model, @RequestParam(value = "page", defaultValue = "1") int page) {
         Page<Post> paging = postService.findAll(page);
 
         model.addAttribute("paging", paging);
+
+        return "domain/post/post/list";
+    }*/
+
+    // 검색 조건 추가한 list
+    @GetMapping("/list")
+    public String list(@RequestParam(value = "kwTypes", defaultValue = "title, body") List<String> kwTypes,
+                       @RequestParam(defaultValue = "") String kw,
+                       @RequestParam(defaultValue = "1") int page, Model model) {
+        List<Sort.Order> sorts = new ArrayList<>();
+        sorts.add(Sort.Order.desc("id"));
+        Pageable pageable = PageRequest.of(page - 1, 10, Sort.by(sorts));
+
+        // kwTypes를 맵 형태로 바꿔서, 타임리프의 폼 안에서 쉽게 쓸 수 있도록 한다.
+        Map<String, Boolean> kwTypesMap = kwTypes
+                .stream()
+                .collect(Collectors.toMap(
+                        kwType -> kwType,
+                        kwType -> true
+                ));
+
+        Page<Post> itemsPage = postService.search(kwTypes, kw, pageable);
+        System.out.println("hey");
+        System.out.println(itemsPage.stream().toList());
+        System.out.println(itemsPage.getContent());
+        model.addAttribute("itemsPage", itemsPage);
+        model.addAttribute("kwTypesMap", kwTypesMap);
+        model.addAttribute("paging", itemsPage);
 
         return "domain/post/post/list";
     }

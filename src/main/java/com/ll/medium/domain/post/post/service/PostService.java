@@ -140,4 +140,9 @@ public class PostService {
         if (postRepository.existsPostByIdAndVoterId(post.getId(), voter.getId())) post.getVoter().remove(voter);
         else post.getVoter().add(voter); // 게시글 추천
     }
+
+    // 검색
+    public Page<Post> search(List<String> kwTypes, String kw, Pageable pageable) {
+        return postRepository.search(kwTypes, kw, pageable);
+    }
 }
