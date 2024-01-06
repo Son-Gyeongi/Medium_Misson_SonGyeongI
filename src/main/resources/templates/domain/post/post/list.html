@@ -11,11 +11,16 @@
     <div>
         <form action="/post/list" method="get">
             <div style="display:flex; gap:10px;">
-                <label><input type="checkbox" name="kwTypes" value="title" th:checked="${kwTypesMap['title']}"><span> 제목</span></label>
-                <label><input type="checkbox" name="kwTypes" value="body" th:checked="${kwTypesMap['body']}"><span> 내용</span></label>
-                <label><input type="checkbox" name="kwTypes" value="authorUsername" th:checked="${kwTypesMap['authorUsername']}"><span> 작성자</span></label>
-                <label><input type="checkbox" name="kwTypes" value="commentBody" th:checked="${kwTypesMap['commentBody']}"><span> 댓글</span></label>
-                <label><input type="checkbox" name="kwTypes" value="commentAuthorUsername" th:checked="${kwTypesMap['commentAuthorUsername']}"><span> 댓글 작성자</span></label>
+                <label><input type="checkbox" name="kwTypes" value="title"
+                              th:checked="${kwTypesMap['title']}"><span> 제목</span></label>
+                <label><input type="checkbox" name="kwTypes" value="body"
+                              th:checked="${kwTypesMap['body']}"><span> 내용</span></label>
+                <label><input type="checkbox" name="kwTypes" value="authorUsername"
+                              th:checked="${kwTypesMap['authorUsername']}"><span> 작성자</span></label>
+                <label><input type="checkbox" name="kwTypes" value="commentBody"
+                              th:checked="${kwTypesMap['commentBody']}"><span> 댓글</span></label>
+                <label><input type="checkbox" name="kwTypes" value="commentAuthorUsername"
+                              th:checked="${kwTypesMap['commentAuthorUsername']}"><span> 댓글 작성자</span></label>
                 <!-- 원하는 검색 유형에 따라 추가할 수 있습니다. -->
             </div>
             <input class="border" type="search" name="kw" placeholder="검색어" th:value="${param.kw}">
