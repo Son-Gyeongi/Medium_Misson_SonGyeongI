@@ -1,4 +1,4 @@
-<html layout:decorate="~{global/layout}">
+<html layout:decorate="~{global/layout}" xmlns:th="http://www.thymeleaf.org">
 
 <head>
     <title th:text="|게시글 내용 - ${post.id}. ${post.title}|"></title>
@@ -14,22 +14,225 @@
     <div class="mt-2">
         <div class="badge badge-outline" th:text="${post.id}"></div>
         <span th:text="${post.title}"></span>
+        <span class="badge badge-secondary badge-outlined" th:if="${post.isPaid}">
+            <span th:text="' 유료 글'"></span>
+        </span>
+        <span class="badge badge-info badge-outlined" th:unless="${post.isPaid}">
+            <span th:text="' 무료 글'"></span>
+        </span>
     </div>
 
-    <div class="mt-2 whitespace-pre-line" th:text="${post.body}"></div>
+    <div class="mt-2 whitespace-pre-line" th:if="${!post.isPaid or (@rq.member != null and @rq.isPaid)}"
+         th:text="${post.body}"></div>
+    <div th:if="${post.isPaid and (@rq.member == null or (@rq.member != null and !@rq.isPaid))}">
+        해당 글은 유료멤버십 전용입니다.
+    </div>
 
     <hr class="mt-2">
 
     <div class="mt-2 flex gap-2 justify-center">
-        <!--<a th:if="${@postService.canModify(@rq.member, post)}" class="btn-link"
-           th:href="|/post/${post.id}/modify|">글 수정</a>-->
-        <a class="btn-link" th:href="|/post/${post.id}/modify|">글 수정</a>
-        <!--        global.js에 동적으로 넘어가게 만들었다. 그래서 삭제 잘됨 -->
-        <a method="DELETE" class="btn-link" th:if="${@postService.canDelete(@rq.member, post)}"
+        <a href="javascript:void(0);" class="recommend btn btn-sm btn-outline-secondary"
+           th:data-uri="@{|/post/vote/${post.id}|}">
+            추천
+            <span class="badge rounded-pill bg-success" th:text="${#lists.size(post.voter)}"></span>
+        </a>
+        <!-- 글 작성자와 로그인한 사용자가 같은 경우에만 수정과 삭제 가능하도록 조건 추가 -->
+        <!-- Elvis 연산자를 사용하여 @rq.member가 null인 경우 false를 반환하도록 함 -->
+        <a class="btn-link"
+           th:if="${(@rq.member != null ?: false) and (@rq.member.username == post.author.username or @rq.member.isAdmin())}"
+           th:href="|/post/${post.id}/modify|">글 수정</a>
+        <a method="DELETE" class="btn-link"
+           th:if="${(@rq.member != null ?: false) and (@rq.member.username == post.author.username and @postService.canDelete(@rq.member, post) or @rq.member.isAdmin())}"
            onclick="return confirm('정말로 삭제하시겠습니까?');" th:href="|/post/${post.id}/delete|">
             글 삭제
         </a>
     </div>
+    <!-- 댓글 시작 -->
+    <h1 class="font-bold mt-3 mb-2">
+        <i class="fa-solid fa-comment"></i> 댓글
+    </h1>
+
+    <form th:action="|/comment/write/${post.id}|" class="flex flex-col gap-4" method="POST"
+          onsubmit="submitWriteCommentForm(this); return false;">
+        <div class="form-control mb-5">
+            <textarea name="comment" rows="1" maxlength="1000" placeholder="댓글을 작성해주세요."
+                      class="textarea textarea-bordered mb-3"></textarea>
+            <button class="btn btn-primary btn-block" type="submit">
+                댓글 작성
+            </button>
+        </div>
+    </form>
+
+    <div th:each="comment : ${post.comments}">
+        <!-- 댓글 내용 -->
+        <div class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700 mb-2 comment-container"
+             th:attr="data-comment-id=${comment.id}">
+            <!--            속성 추가 : 댓글id 받아오기-->
+            <div>
+                <span th:text="${comment.comment}"
+                      class="text-gray-800 mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white"></span>
+            </div>
+            <!-- 댓글 작성자와 로그인한 사용자가 같은 경우에만 수정 및 삭제 가능하도록 조건 추가 -->
+            <div th:if="${(@rq.member != null ?: false) and (@rq.member.username == comment.author.username or @rq.member.isAdmin())}"
+                 class="flex gap-2 items-center">
+                <!--      <a th:href="|/comment/${comment.id}/modify|" class="btn-link">댓글 수정</a>-->
+                <!-- 수정버튼 누르면 나타나는 코드 시작-->
+                <a href="javascript:void(0);" class="edit text-blue-500 hover:underline" th:text="수정"></a>
+                <span class="edit-buttons mx-2" style="display:none;">|</span>
+                <a href="javascript:void(0);" class="update text-blue-500 hover:underline"
+                   style="display:none;">수정하기</a>
+                <span class="cancel-buttons mx-2" style="display:none;">|</span>
+                <a href="javascript:void(0);" class="cancel text-red-500 hover:underline" style="display:none;">취소하기</a>
+                <span class="mx-2">|</span>
+                <!-- 수정버튼 누르면 나타나는 코드 끝-->
+                <a method="DELETE" class="btn-link delete" th:href="|/comment/${comment.id}/delete|"
+                   onclick="return confirm('정말로 삭제하시겠습니까?');">
+                    댓글 삭제
+                </a>
+            </div>
+            <div>
+                <span th:text="| by ${comment.author.username}|"
+                      class="font-normal text-gray-700 dark:text-gray-400"></span>
+            </div>
+        </div>
+    </div>
+
+    <!--    https://flowbite.com/docs/components/card/
+            <a href="#" class="block max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100 dark:bg-gray-800 dark:border-gray-700 dark:hover:bg-gray-700">-->
+
+    <!--        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Noteworthy technology acquisitions 2021</h5>-->
+    <!--        <p class="font-normal text-gray-700 dark:text-gray-400">Here are the biggest enterprise technology acquisitions of 2021 so far, in reverse chronological order.</p>-->
+    <!--    </a>-->
+
+    <script>
+        function submitWriteCommentForm(form) {
+            form.body.value = form.body.value.trim();
+
+            if (form.body.value.length === 0) {
+                toastWarning('댓글을 작성해주세요.');
+                form.body.focus();
+
+                return;
+            }
+
+            form.submit();
+        }
+
+        // 게시글 추천
+        const recommend_elements = document.getElementsByClassName("recommend");
+        Array.from(recommend_elements).forEach(function (element) {
+            element.addEventListener('click', function () {
+                location.href = this.dataset.uri;
+            });
+        });
+
+        // 수정 버튼 누를 때
+        const edit_elements = document.querySelectorAll(".edit");
+        edit_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                // 클래스 이름이 comment-container 인 엘리먼트를 가져온다. 하위 엘리먼트도 같이 가져온다.
+                const commentContainer = this.closest('.comment-container');
+                if (!commentContainer) {
+                    console.error("comment-container를 찾을 수 없습니다.");
+                    return;
+                }
+
+                const commentContent = commentContainer.querySelector('.text-gray-800');
+                if (!commentContent) {
+                    console.error("comment-content2를 찾을 수 없습니다.");
+                    return;
+                }
+                const originalContent = commentContent.innerText.trim();
+
+                const textarea = document.createElement('textarea');
+                textarea.value = originalContent;
+                textarea.classList.add('w-full', 'px-3', 'py-2', 'border', 'rounded-md', 'focus:outline-none', 'focus:shadow-outline-blue');
+
+                // data-original-content 속성을 사용하여 원래 내용을 저장
+                textarea.setAttribute('data-original-content', originalContent);
+
+                commentContent.replaceWith(textarea);
+
+                element.style.display = 'none';
+                commentContainer.querySelector('.edit-buttons').style.display = 'inline';
+                commentContainer.querySelector('.cancel-buttons').style.display = 'inline';
+                commentContainer.querySelector('.update').style.display = 'inline';
+                commentContainer.querySelector('.cancel').style.display = 'inline';
+                commentContainer.querySelector('.delete').style.display = 'none';
+            });
+        });
+
+        const csrfToken = document.querySelector("meta[name='_csrf']").content;
+        const csrfHeader = document.querySelector("meta[name='_csrf_header']").content;
+
+        // 댓글 수정 버튼 클릭 시
+        const update_elements = document.querySelectorAll(".update");
+        update_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                const commentContainer = this.closest('.comment-container');
+                if (!commentContainer) {
+                    console.error("comment-container를 찾을 수 없습니다.");
+                    return;
+                }
+                const textarea = commentContainer.querySelector('textarea');
+                if (!textarea) {
+                    console.error("textarea를 찾을 수 없습니다.");
+                    return;
+                }
+                // 수정한 내용 저장
+                const updatedContent = textarea.value;
+
+                // 댓글 ID 추출 / 가져온 html에서 data-comment-id 속성에 있는 값을 가져온다.
+                const commentId = commentContainer.getAttribute('data-comment-id');
+
+                // AJAX를 사용하여 서버로 댓글 업데이트 요청
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', `/comment/${commentId}/modify`, true);
+                xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+                xhr.setRequestHeader(csrfHeader, csrfToken); // CSRF 토큰 추가
+                xhr.onload = function () {
+                    if (xhr.status === 200) {
+                        location.reload();
+                    } else {
+                        console.error("댓글 업데이트에 실패하였습니다.");
+                    }
+                };
+                // 프론트와 백 데이터 주고 받을 때 데이터 이름(comment) 맞춰야 함
+                const data = JSON.stringify({comment: updatedContent}); // Json형식으로 data를 보낸다. 백에서 받을 때는 @RequestBody로 받아야 한다.
+                xhr.send(data);
+            });
+        });
+
+        const cancel_elements = document.querySelectorAll(".cancel");
+        cancel_elements.forEach(function (element) {
+            element.addEventListener('click', function () {
+                const commentContainer = this.closest('.comment-container');
+                if (!commentContainer) {
+                    console.error("comment-container를 찾을 수 없습니다.");
+                    return;
+                }
+                const textarea = commentContainer.querySelector('textarea');
+                if (!textarea) {
+                    console.error("textarea를 찾을 수 없습니다.");
+                    return;
+                }
+                const originalContent = textarea.getAttribute('data-original-content');
+
+                const originalCommentContent = document.createElement('p');
+                originalCommentContent.classList.add('text-gray-800');
+                originalCommentContent.innerText = originalContent;
+                textarea.replaceWith(originalCommentContent);
+
+                commentContainer.querySelector('.edit').style.display = 'inline';
+                commentContainer.querySelector('.update').style.display = 'none';
+                commentContainer.querySelector('.cancel').style.display = 'none';
+                commentContainer.querySelector('.delete').style.display = 'inline';
+                commentContainer.querySelector('.edit-buttons').style.display = 'none';
+                commentContainer.querySelector('.cancel-buttons').style.display = 'none';
+            });
+        });
+    </script>
+    <!-- 댓글 끝 -->
 </div>
 </body>
 </html>

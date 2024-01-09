@@ -8,7 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.Optional;
 
-public interface PostRepository extends JpaRepository<Post, Long> {
+public interface PostRepository extends JpaRepository<Post, Long>, PostRepositoryCustom {
     // isPublished가 TRUE이고, 주어진 id에 적합한 글 가져오기
     Optional<Post> findByIsPublishedTrueAndId(Long id);
 
@@ -30,4 +30,8 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
     // 내 글 목록 조회
     Page<Post> findAllByAuthorIdOrderByCreatedDateDesc(Long authorId, Pageable pageable);
+
+    // 게시글 추천인 찾기
+    // Post_Voter 테이블에서 post_id와 voter_id로 로우가 존재하는지 확인하는 메서드
+    boolean existsPostByIdAndVoterId(Long postId, Long voterId);
 }

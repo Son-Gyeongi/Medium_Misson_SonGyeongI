@@ -18,9 +18,10 @@ import java.util.List;
 public class Member extends BaseEntity {
     private String username;
     private String password;
+    private boolean isPaid; // 유료 회원 : true
 
     public boolean isAdmin() {
-        return username.equals(Role.ADMIN);
+        return username.equals("admin");
     }
 
     // 권한 부여
@@ -28,6 +29,9 @@ public class Member extends BaseEntity {
     public List<SimpleGrantedAuthority> getAuthorities() {
         if (isAdmin()) {
             return List.of(new SimpleGrantedAuthority(Role.ADMIN.value()),
+                    new SimpleGrantedAuthority(Role.MEMBER.value()));
+        } else if (isPaid) {
+            return List.of(new SimpleGrantedAuthority(Role.PAID.value()),
                     new SimpleGrantedAuthority(Role.MEMBER.value()));
         }
 

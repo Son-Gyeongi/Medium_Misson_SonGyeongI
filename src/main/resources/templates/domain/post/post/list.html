@@ -7,6 +7,26 @@
 <body>
 <div layout:fragment="content">
     <h1 class="font-bold mb-2"><i class="fa-solid fa-list"></i> 게시글 목록</h1>
+    <!-- 추가된 부분: 검색 폼 -->
+    <div>
+        <form action="/post/list" method="get">
+            <div style="display:flex; gap:10px;">
+                <label><input type="checkbox" name="kwTypes" value="title"
+                              th:checked="${kwTypesMap['title']}"><span> 제목</span></label>
+                <label><input type="checkbox" name="kwTypes" value="body"
+                              th:checked="${kwTypesMap['body']}"><span> 내용</span></label>
+                <label><input type="checkbox" name="kwTypes" value="authorUsername"
+                              th:checked="${kwTypesMap['authorUsername']}"><span> 작성자</span></label>
+                <label><input type="checkbox" name="kwTypes" value="commentBody"
+                              th:checked="${kwTypesMap['commentBody']}"><span> 댓글</span></label>
+                <label><input type="checkbox" name="kwTypes" value="commentAuthorUsername"
+                              th:checked="${kwTypesMap['commentAuthorUsername']}"><span> 댓글 작성자</span></label>
+                <!-- 원하는 검색 유형에 따라 추가할 수 있습니다. -->
+            </div>
+            <input class="border" type="search" name="kw" placeholder="검색어" th:value="${param.kw}">
+            <input type="submit" value="검색">
+        </form>
+    </div>
     <table class="table">
         <thead class="table-dark">
         <tr class="text-center">
@@ -18,21 +38,18 @@
         </thead>
         <tbody>
         <!--        테이블 내용을 가운데 정렬-->
-        <tr class="text-center" th:each="post, loop : ${paging}">
+        <tr class="text-center" th:each="post, loop : ${itemsPage.content}">
             <!--            게시물 번호 공식-->
             <td th:text="${paging.getTotalElements - (paging.number * paging.size) - loop.index}"></td>
             <!--            제목을 왼쪽 정렬-->
             <td class="text-start">
                 <!--            타임리프는 문자열을 연결(concatenation)할 때 | 문자를 사용 -->
                 <a th:href="@{|/post/${post.id}|}" th:text="${post.title}"></a>
-                <!--<span class="text-danger small ms-2"
-                      th:if="${#lists.size(post.answerList) > 0}"
-                      th:text="${#lists.size(post.answerList)}">
-&lt;!&ndash;                    #list.size(이터러블객체)는 이터러블 객체의 사이즈를 반환하는 타임리프의 유틸리티&ndash;&gt;
-                </span>-->
+                <div class="badge badge-success" th:text="|조회수 ${post.viewCount}|"></div>
             </td>
             <td>
-                <a th:if="${post.author != null}" th:href="@{|/b/${post.author.username}|}" th:text="${post.author.username}"></a>
+                <a th:if="${post.author != null}" th:href="@{|/b/${post.author.username}|}"
+                   th:text="${post.author.username}"></a>
             </td>
             <!--            날짜를 보기 좋게 출력하기 위해 타임리프의 #temporals.format 유틸리티를 사용-->
             <td th:text="${#temporals.format(post.createdDate, 'yyyy-MM-dd HH:mm')}"></td>
@@ -44,28 +61,37 @@
         .pagination .active {
             color: red;
         }
+
+        .pagination {
+            display: flex;
+            justify-content: center;
+            list-style: none;
+            padding: 0;
+        }
+
+        .pagination li {
+            margin: 0 5px;
+        }
     </style>
     <div th:if="${!paging.isEmpty()}">
         <ul class="pagination justify-content-center">
             <li class="page-item" th:classappend="${!paging.hasPrevious} ? 'disabled'">
-<!--                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number-1}">-->
-                <a class="page-link" th:href="@{|?page=${paging.number}|}">
+                <a th:if="${paging.hasPrevious}" class="page-link" th:href="@{|?page=${paging.number}|}">
                     <span>이전</span>
                 </a>
+                <span th:unless="${paging.hasPrevious}">이전</span>
             </li>
             <li th:each="page: ${#numbers.sequence(1, paging.totalPages)}"
                 th:if="${page >= paging.number-5 and page <= paging.number+5}"
                 th:classappend="${page == paging.number+1} ? 'active'"
                 class="page-item">
                 <a th:text="${page}" class="page-link" th:href="@{|?page=${page}|}"></a>
-<!--                <a th:text="${page}" class="page-link" href="javascript:void(0)" th:data-page="${page}"></a>-->
             </li>
-<!--            th:classappend="${!paging.hasNext} ? 'disabled'" 다음 페이지가 없으면 비활성화 -->
-            <li class="page-item" th:classappend="${!(paging.hasNext)} ? 'disabled'">
-<!--                <a class="page-link" href="javascript:void(0)" th:data-page="${paging.number+1}">-->
-                <a class="page-link" th:href="@{|?page=${paging.number+2}|}">
+            <li class="page-item" th:classappend="${!paging.hasNext} ? 'disabled'">
+                <a th:if="${paging.hasNext}" class="page-link" th:href="@{|?page=${paging.number+2}|}">
                     <span>다음</span>
                 </a>
+                <span th:unless="${paging.hasNext}">다음</span>
             </li>
         </ul>
     </div>

@@ -35,35 +35,69 @@ public class NotProd {
 
     @Transactional
     public void work1() {
-        if (memberService.count()) return;
+        if (memberService.count() > 0) return;
 
-        // 사용자 생성
-        Member member1 = memberService.join("user1", "1234").getData();
-        Member member2 = memberService.join("user2", "1234").getData();
-        Member member3 = memberService.join("user3", "1234").getData();
+        // admin 사용자 생성
+        Member admin = memberService.join("admin", "1234", true).getData();
 
-        // 게시글 생성
-        postService.write("제목1", "내용1", Boolean.TRUE, member1); // 공개글
-        postService.write("제목2", "내용2", Boolean.FALSE, member1); // 비공개글
-        postService.write("제목3", "내용3", Boolean.TRUE, member1);
-        postService.write("제목4", "내용4", Boolean.TRUE, member2);
-        postService.write("제목5", "내용5", Boolean.FALSE, member2);
-
-        IntStream.rangeClosed(6, 35).forEach(
+        // 유료 멤버십 가입, 공개 글, 유료 글
+        IntStream.rangeClosed(1, 20).forEach(
                 i -> {
-                    String title = "제목" + i;
-                    String body = "내용" + i;
+                    String username = "user" + i;
+                    Member member = memberService.join(username, "1234", true).getData();
 
-                    postService.write(title, body, Boolean.TRUE, member3);
+                    postService.write("제목" + i, "내용" + i, Boolean.TRUE, member, true);
                 }
         );
 
-        IntStream.rangeClosed(36, 40).forEach(
+        // 유료 멤버십 가입, 공개 글, 무료 글
+        IntStream.rangeClosed(21, 40).forEach(
                 i -> {
-                    String title = "제목" + i;
-                    String body = "내용" + i;
+                    String username = "user" + i;
+                    Member member = memberService.join(username, "1234", true).getData();
 
-                    postService.write(title, body, Boolean.FALSE, member3);
+                    postService.write("제목" + i, "내용" + i, Boolean.TRUE, member, false);
+                }
+        );
+
+        // 유료 멤버십 가입, 비공개 글, 유료 글
+        IntStream.rangeClosed(41, 60).forEach(
+                i -> {
+                    String username = "user" + i;
+                    Member member = memberService.join(username, "1234", true).getData();
+
+                    postService.write("제목" + i, "내용" + i, Boolean.FALSE, member, true);
+                }
+        );
+
+        // 유료 멤버십 가입, 비공개 글, 무료 글
+        IntStream.rangeClosed(61, 80).forEach(
+                i -> {
+                    String username = "user" + i;
+                    Member member = memberService.join(username, "1234", true).getData();
+
+                    postService.write("제목" + i, "내용" + i, Boolean.FALSE, member, false);
+                }
+        );
+
+        // 무료 멤버십 가입, 유료 글 작성 못함
+        // 무료 멤버십 가입, 공개 글
+        IntStream.rangeClosed(81, 100).forEach(
+                i -> {
+                    String username = "user" + i;
+                    Member member = memberService.join(username, "1234", false).getData();
+
+                    postService.write("제목" + i, "내용" + i, Boolean.TRUE, member, false);
+                }
+        );
+
+        // 무료 멤버십 가입, 비공개 글
+        IntStream.rangeClosed(101, 120).forEach(
+                i -> {
+                    String username = "user" + i;
+                    Member member = memberService.join(username, "1234", false).getData();
+
+                    postService.write("제목" + i, "내용" + i, Boolean.FALSE, member, false);
                 }
         );
     }

@@ -17,7 +17,9 @@
             </label>
             <ul tabindex="0"
                 class="menu menu-sm dropdown-content mt-3 z-[1] p-2 shadow bg-base-100 rounded-box w-52">
-                <!--                <li th:if="${@rq.admin}"><a href="/adm"><i class="fa-solid fa-gauge-high"></i> 관리자</a></li>-->
+                <!--                로그인 된 사용자 중에서 관리자일 경우 관리자 페이지로 가는 아이콘이 생긴다.-->
+                <li th:if="${@rq.isLogined && @rq.member.isAdmin()}"><a href="/adm"><i
+                        class="fa-solid fa-gauge-high"></i> 관리자</a></li>
                 <li><a href="/"><i class="fa-solid fa-house"></i> 메인</a></li>
                 <li><a href="/post/list"><i class="fa-solid fa-list"></i> 게시물 목록</a></li>
                 <li th:if="${@rq.logined}"><a href="/post/write"><i class="fa-solid fa-pen"></i> 게시물 작성</a></li>
@@ -39,6 +41,21 @@
     <div class="navbar-end">
         <a th:if="${@rq.isLogined}" href="/post/myList" class="btn btn-ghost text-xl">
             <span th:text="|welcome ${@rq.member.username}|"></span>
+
+            <!-- 관리자 체크 -->
+            <span th:if="${@rq.member.isAdmin()}">
+                <span th:text="' 관리자'"></span>
+            </span>
+
+            <!-- 유료/일반 회원 체크 -->
+            <span th:unless="${@rq.member.isAdmin()}">
+                <span th:if="${@rq.member.isPaid()}">
+                    <span th:text="' 유료 회원'"></span>
+                </span>
+                <span th:unless="${@rq.member.isPaid()}">
+                    <span th:text="' 일반 회원'"></span>
+                </span>
+            </span>
         </a>
     </div>
 </header>

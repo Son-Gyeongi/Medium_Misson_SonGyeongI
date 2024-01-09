@@ -58,8 +58,8 @@ public class PostService {
     }
 
     @Transactional
-    public RsData<Post> write(String title, String body, Boolean isPublished, Member author) {
-        Post post = new Post(title, body, isPublished, author);
+    public RsData<Post> write(String title, String body, Boolean isPublished, Member author, Boolean isPaid) {
+        Post post = new Post(title, body, isPublished, author, isPaid);
 
         postRepository.save(post);
 
@@ -85,14 +85,16 @@ public class PostService {
     }
 
     // 게시글 상세 조회
+    @Transactional
     public Post getDetailPost(Long id) {
         Post post = getPost(id);
 
         // 로그인 하지 않은 유저, 로그인 했지만 작성자가 아닌 유저 isPublished True만 줘야함
         // 하지만 이미 리스트에는 True만 있음/ url로 직접 작성해서 들어온 사람 막기
         if (rq.getMember() == null
-        || !(post.getAuthor().getUsername().equals(rq.getMember().getUsername()))) {
+                || !(post.getAuthor().getUsername().equals(rq.getMember().getUsername()))) {
             // 공개된 글 보여주기
+            post.setViewCount(post.getViewCount() + 1); // 조회수
             return postRepository.findByIsPublishedTrueAndId(id).orElseThrow(
                     () -> new IllegalArgumentException("해당 하는 게시글이 없습니다.")
             );
@@ -104,11 +106,12 @@ public class PostService {
 
     // 게시글 수정
     @Transactional
-    public void modify(Post post, String title, String body, Boolean isPublished, Member author) {
+    public void modify(Post post, String title, String body, Boolean isPublished, Boolean isPaid, Member author) {
         post.setTitle(title);
         post.setBody(body);
         post.setAuthor(author);
         post.setIsPublished(isPublished);
+        post.setIsPaid(isPaid);
     }
 
     // 게시글 삭제
@@ -128,5 +131,18 @@ public class PostService {
         if (author == null) return false;
 
         return post.getAuthor().equals(author);
+    }
+
+    // 게시글 추천
+    @Transactional
+    public void vote(Post post, Member voter) {
+        // 게시글에 추천한 사람이 있다면 게시글 추천 취소
+        if (postRepository.existsPostByIdAndVoterId(post.getId(), voter.getId())) post.getVoter().remove(voter);
+        else post.getVoter().add(voter); // 게시글 추천
+    }
+
+    // 검색
+    public Page<Post> search(List<String> kwTypes, String kw, Pageable pageable) {
+        return postRepository.search(kwTypes, kw, pageable);
     }
 }
